@@ -1,17 +1,18 @@
 {
   "name": "doodad-js-locale",
-  "version": "1.0.1",
-  "description": "Object-oriented programming framework for Javascript",
+  "version": "1.0.2",
+  "description": "\"doodad-js\" Locale",
   "homepage": "https://sourceforge.net/projects/doodad-js/",
   "main": "index.js",
   "files": [
     "src",
     "dist",
-	"res",
-	"Tools_Locale.min.js",
+    "res",
+    "Tools_Locale.min.js",
     "index.js",
     "make.json",
-	"LICENSE"
+    "README",
+    "LICENSE"
   ],
   "scripts": {
     "prepublish": "node -r \"doodad-js-make/make.js\" . make",
@@ -28,7 +29,7 @@
   },
   "repository": {
     "type": "svn",
-    "url": "https://svn.code.sf.net/p/doodad-js/code/node_modules/doodad-js-locale/"
+    "url": "https://svn.code.sf.net/p/doodad-js/code/trunk/node_modules/doodad-js-locale/"
   },
   "bugs": {
     "url" : "https://sourceforge.net/p/doodad-js/tickets/",
