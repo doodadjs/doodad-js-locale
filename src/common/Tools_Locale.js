@@ -37,7 +37,7 @@
 			type: null,
 			version: '1r',
 			namespaces: null,
-			dependencies: ['Doodad.Tools'],
+			dependencies: ['Doodad.Tools', 'Doodad.Types', 'Doodad.Namespaces', 'Doodad.Modules'],
 			
 			create: function create(root, /*optional*/_options) {
 				"use strict";
@@ -46,13 +46,14 @@
 					types = doodad.Types,
 					tools = doodad.Tools,
 					namespaces = doodad.Namespaces,
+					modules = doodad.Modules,
 					files = tools.Files,
 					locale = tools.Locale;
 
 					
 				_options = types.depthExtend(2, {
 					settings: {
-						localePath: './res/locales/',
+						localePath: (global.process && root.startupOptions.settings.fromSource ? './src/common/res/locales' : './res/locales'),
 					},
 				}, _options);
 					
@@ -164,9 +165,10 @@
 				
 					
 				__Internal__.getFileUrl = function(fileName) {
-					var localePath = tools.getCurrentScript((global.document?document.currentScript:module.filename)||(function(){try{throw new Error("");}catch(ex){return ex;}})());
-					localePath = localePath.combine(tools.options.hooks.pathParser(_options.settings.localePath, {os: 'linux', file: fileName, isRelative: null}));
-					return localePath;
+					return modules.locate('doodad-js-locale').then(function(location) {
+						location = location.combine(tools.options.hooks.pathParser(_options.settings.localePath, { os: 'linux', file: fileName, isRelative: null }));
+						return location;
+					});
 				};
 				
 	/* NOT NEEDED FOR THE MOMENT		
@@ -441,24 +443,25 @@
 					if (cached) {
 						return Promise.resolve(cached);
 					};
-					var path = __Internal__.getFileUrl(name);
-		//console.log(path);
-					return files.readFile(path, {async: true, encoding: 'utf8', enableCache: true})
-						.then(function proceed(data) {
-		//console.log(data);
-							return __Internal__.parseLocaleFile(data, __Internal__.categories, category, sections)
-								.then(function(loc) {
+					return __Internal__.getFileUrl(name).then(function(path) {
+						//console.log(path);
+						return files.readFile(path, { async: true, encoding: 'utf8', enableCache: true })
+							.then(function proceed(data) {
+								//console.log(data);
+								return __Internal__.parseLocaleFile(data, __Internal__.categories, category, sections)
+									.then(function (loc) {
 									loc = {
 										categories: loc,
 									};
-									
+								
 									if (!category && !sections) {
 										__Internal__.cache[name] = loc;
 									};
-									
+								
 									return loc;
 								});
-						});
+							});
+					});
 				};
 				
 				locale.loadLocale = function loadLocale(name) {
