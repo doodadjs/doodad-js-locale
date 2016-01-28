@@ -1,5 +1,5 @@
 // dOOdad - Object-oriented programming framework
-// File: index.js - Locale module startup file
+// File: main.js - Module startup file for 'browserify'.
 // Project home: https://sourceforge.net/projects/doodad-js/
 // Trunk: svn checkout svn://svn.code.sf.net/p/doodad-js/code/trunk doodad-js-code
 // Author: Claude Petit, Quebec city
@@ -21,41 +21,42 @@
 //	See the License for the specific language governing permissions and
 //	limitations under the License.
 
-(function() {
-	var global = this;
+"use strict";
 
-	var exports = {};
-	if (typeof process === 'object') {
-		module.exports = exports;
-	};
-	
-	var MODULE_NAME = 'doodad-js-locale';
-	
-	exports.add = function add(DD_MODULES) {
+module.exports = {
+	add: function add(DD_MODULES) {
 		DD_MODULES = (DD_MODULES || {});
-		DD_MODULES[MODULE_NAME] = {
+		DD_MODULES['doodad-js-locale'] = {
 			type: null,
-			version: '0b',
+			version: '0a',
 			namespaces: null,
-			dependencies: ['Doodad.Modules'],
-			exports: exports,
+			dependencies: [],
+			exports: module.exports,
 			
 			create: function create(root, /*optional*/_options) {
-				"use strict";
+				var config = null;
+				try {
+					config = require('./dist/doodad-js-locale/config.json');
+				} catch(ex) {
+				};
 				
-				var doodad = root.Doodad,
-					modules = doodad.Modules;
+				var fromSource = root.getOptions().settings.fromSource,
+					modules = {};
 				
-				var fromSource = root.getOptions().settings.fromSource;
+				require('./browserify/resources.js').add(modules);
 
-				return modules.load(MODULE_NAME, (fromSource ? (global.process ? 'src/common/Tools_Locale.js' : 'Tools_Locale.js') : 'Tools_Locale.min.js'), _options);
+				if (fromSource) {
+					require("./dist/doodad-js-locale/Tools_Locale.js").add(modules);
+				} else {
+					// TODO: Find a way to prevent browserify to bundle both versions.
+					//require("./dist/doodad-js-locale/Tools_Locale.min.js").add(modules);
+					
+					require("./dist/doodad-js-locale/Tools_Locale.js").add(modules);
+				};
+				
+				return root.Doodad.Namespaces.loadNamespaces(null, false, config, modules);
 			},
 		};
 		return DD_MODULES;
-	};
-	
-	if (typeof process !== 'object') {
-		// <PRB> export/import are not yet supported in browsers
-		global.DD_MODULES = exports.add(global.DD_MODULES);
-	};
-}).call((typeof global !== 'undefined') ? global : ((typeof window !== 'undefined') ? window : this));
+	},
+};

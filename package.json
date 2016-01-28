@@ -1,8 +1,16 @@
 {
   "name": "doodad-js-locale",
-  "version": "1.0.2",
+  "version": "1.2.4",
   "description": "\"doodad-js\" Locale",
   "homepage": "https://sourceforge.net/projects/doodad-js/",
+  "config": {
+    "Doodad__Tools__Locale": {
+      "settings": {
+        "resourcesPath": "./res/",
+        "localesPath": "./locales/"
+      }
+    }
+  },
   "main": "index.js",
   "files": [
     "src",
@@ -12,11 +20,16 @@
     "index.js",
     "make.json",
     "README",
-    "LICENSE"
+    "LICENSE",
+	"tonic.js",
+	"browserify",
+	"browserify.js",
+	"resources.templ.js"
   ],
   "scripts": {
     "prepublish": "node -r \"doodad-js-make/make.js\" . make",
-    "configure": "node -r \"doodad-js-make/make.js\" . custom=configure"
+    "configure": "node -r \"doodad-js-make/make.js\" . custom=configure",
+    "browserify": "node -r \"doodad-js-make/make.js\" . custom=browserify"
   },
   "keywords": [
     "doodad-js",
@@ -25,7 +38,7 @@
   "author": "Claude Petit <doodadjs@gmail.com> (https://sourceforge.net/projects/doodad-js/)",
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=4.2.0 <5.4.0"
+    "node": ">=4.2.0 <6.0.0"
   },
   "repository": {
     "type": "svn",
@@ -36,9 +49,11 @@
     "email" : "doodadjs@gmail.com"
   },
   "dependencies": {
-    "doodad-js": "^1.0.0"
+    "doodad-js": "^1.1.0"
   },
-   "devDependencies": {
-    "doodad-js-make": "^0.1.0"
-  }
+  "devDependencies": {
+    "doodad-js-make": "^0.2.0"
+  },
+  "tonicExampleFilename": "tonic.js",
+  "browser": "./browserify.js"
 }
