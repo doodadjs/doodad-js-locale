@@ -1,6 +1,6 @@
 {
   "name": "doodad-js-locale",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "\"doodad-js\" Locale",
   "homepage": "https://sourceforge.net/projects/doodad-js/",
   "config": {
@@ -49,7 +49,7 @@
     "email" : "doodadjs@gmail.com"
   },
   "dependencies": {
-    "doodad-js": "^1.1.0"
+    "doodad-js": "^1.2.0"
   },
   "devDependencies": {
     "doodad-js-make": "^0.2.0"
