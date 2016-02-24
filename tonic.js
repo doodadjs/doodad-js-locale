@@ -5,14 +5,14 @@ const root = require('doodad-js').createRoot( /*bootstrapModules*/ null, /*optio
 const modules = {};
 require('doodad-js-locale').add(modules);
 
-root.Doodad.Namespaces.loadNamespaces( function callback() {
-	
+function startup() {
 	const locale = root.Doodad.Tools.Locale;
 	return locale.loadLocale('fr_FR').then(function(loc) {
 		console.log(loc);
 	});
-	
-}, /*donThrow*/ false, /*options*/ null, modules )
+};
+
+root.Doodad.Namespaces.loadNamespaces( /*callback*/ startup, /*donThrow*/ false, /*options*/ null, modules )
 	['catch'](function(err) {
 		console.error(err);
 	});

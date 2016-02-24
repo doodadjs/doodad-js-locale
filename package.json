@@ -1,7 +1,7 @@
 {
   "name": "doodad-js-locale",
-  "version": "1.2.5",
-  "description": "\"doodad-js\" Locale",
+  "version": "1.2.6",
+  "description": "Locales provider.",
   "homepage": "https://sourceforge.net/projects/doodad-js/",
   "config": {
     "Doodad__Tools__Locale": {
