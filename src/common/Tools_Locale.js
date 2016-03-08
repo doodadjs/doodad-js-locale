@@ -1,4 +1,4 @@
-//! REPLACE_BY("// Copyright 2016 Claude Petit, licensed under Apache License version 2.0\n")
+﻿//! REPLACE_BY("// Copyright 2016 Claude Petit, licensed under Apache License version 2.0\n")
 // dOOdad - Object-oriented programming framework
 // File: Tools_Locale.js - Useful locale tools
 // Project home: https://sourceforge.net/projects/doodad-js/
@@ -35,10 +35,12 @@
 		DD_MODULES = (DD_MODULES || {});
 		DD_MODULES['Doodad.Tools.Locale'] = {
 			type: null,
-			version: '1.2r',
+			version: '1.3.0r',
 			namespaces: null,
 			dependencies: [
 				'Doodad.Tools', 
+				'Doodad.Tools.Files', 
+				'Doodad.Tools.Unicode', 
 				'Doodad.Types', 
 				'Doodad.Namespaces', 
 				'Doodad.Modules',
@@ -53,125 +55,28 @@
 					namespaces = doodad.Namespaces,
 					modules = doodad.Modules,
 					files = tools.Files,
+					unicode = tools.Unicode,
 					locale = tools.Locale;
 
-					
 				var __Internal__ = {
 					categories: null,
-					current: {
-						/***********************************************************************************/
-						
-						//! REPLACE_BY("\n// Copyright (C) 2002-2015 Free Software Foundation, Inc.\n")
-						/* Copyright (C) 2002-2015 Free Software Foundation, Inc.
-						   The following is a translation of the file 'en_US' of the GNU C Library.
-
-						   The GNU C Library is free software; you can redistribute it and/or
-						   modify it under the terms of the GNU Lesser General Public
-						   License as published by the Free Software Foundation; either
-						   version 2.1 of the License, or (at your option) any later version.
-
-						   The GNU C Library is distributed in the hope that it will be useful,
-						   but WITHOUT ANY WARRANTY; without even the implied warranty of
-						   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-						   Lesser General Public License for more details.
-
-						   You should have received a copy of the GNU Lesser General Public
-						   License along with the GNU C Library; if not, see
-						   <http://www.gnu.org/licenses/>.  */
-						//! END_REPLACE()
-						
-						LC_IDENTIFICATION: {
-							title:     "English locale for the USA",
-							source:    "Free Software Foundation, Inc.",
-							address:   "http://www.gnu.org/software/libc/",
-							contact:   "",
-							email:     "bug-glibc-locales@gnu.org",
-							tel:       "",
-							fax:       "",
-							language:  "English",
-							territory: "USA",
-							revision:  "1.0",
-							date:      "2000-06-24",
-							category:  ["en_US:2000", "LC_IDENTIFICATION", "en_US:2000", "LC_TIME"],
-						},
-
-						LC_TIME: {
-							abday: ["\u0053\u0075\u006E", "\u004D\u006F\u006E",
-								"\u0054\u0075\u0065","\u0057\u0065\u0064",
-								"\u0054\u0068\u0075","\u0046\u0072\u0069",
-								"\u0053\u0061\u0074"],
-							day: ["\u0053\u0075\u006E\u0064\u0061\u0079",
-								"\u004D\u006F\u006E\u0064\u0061\u0079",
-								"\u0054\u0075\u0065\u0073\u0064\u0061\u0079",
-								"\u0057\u0065\u0064\u006E\u0065\u0073\u0064\u0061\u0079",
-								"\u0054\u0068\u0075\u0072\u0073\u0064\u0061\u0079",
-								"\u0046\u0072\u0069\u0064\u0061\u0079",
-								"\u0053\u0061\u0074\u0075\u0072\u0064\u0061\u0079"],
-
-							week: [7,19971130,7],
-							first_weekday: 1,
-							first_workday: 2,
-							abmon: ["\u004A\u0061\u006E","\u0046\u0065\u0062",
-								"\u004D\u0061\u0072","\u0041\u0070\u0072",
-								"\u004D\u0061\u0079","\u004A\u0075\u006E",
-								"\u004A\u0075\u006C","\u0041\u0075\u0067",
-								"\u0053\u0065\u0070","\u004F\u0063\u0074",
-								"\u004E\u006F\u0076","\u0044\u0065\u0063"],
-							mon: ["\u004A\u0061\u006E\u0075\u0061\u0072\u0079",
-								"\u0046\u0065\u0062\u0072\u0075\u0061\u0072\u0079",
-								"\u004D\u0061\u0072\u0063\u0068",
-								"\u0041\u0070\u0072\u0069\u006C",
-								"\u004D\u0061\u0079",
-								"\u004A\u0075\u006E\u0065",
-								"\u004A\u0075\u006C\u0079",
-								"\u0041\u0075\u0067\u0075\u0073\u0074",
-								"\u0053\u0065\u0070\u0074\u0065\u006D\u0062\u0065\u0072",
-								"\u004F\u0063\u0074\u006F\u0062\u0065\u0072",
-								"\u004E\u006F\u0076\u0065\u006D\u0062\u0065\u0072",
-								"\u0044\u0065\u0063\u0065\u006D\u0062\u0065\u0072"],
-							// Appropriate date and time representation (%c)
-							//	"%a %d %b %Y %r %Z"
-							d_t_fmt: "\u0025\u0061\u0020\u0025\u0064\u0020\u0025\u0062\u0020\u0025\u0059\u0020\u0025\u0072\u0020\u0025\u005A",
-							//
-							// Appropriate date representation (%x)
-							//	"%m/%d/%Y"
-							d_fmt: "\u0025\u006D\u002F\u0025\u0064\u002F\u0025\u0059",
-							//
-							// Appropriate time representation (%X)
-							//	"%r"
-							t_fmt: "\u0025\u0072",
-							//
-							// Appropriate AM/PM time representation (%r)
-							//	"%I:%M:%S %p"
-							t_fmt_ampm: "\u0025\u0049\u003A\u0025\u004D\u003A\u0025\u0053\u0020\u0025\u0070",
-							//
-							// Strings for AM/PM
-							//
-							am_pm: ["\u0041\u004D","\u0050\u004D"],
-							//
-							// Appropriate date representation (date(1))   "%a %b %e %H:%M:%S %Z %Y"
-							date_fmt: "\u0025\u0061\u0020\u0025\u0062\u0020\u0025\u0065\u0020\u0025\u0048\u003A\u0025\u004D\u003A\u0025\u0053\u0020\u0025\u005A\u0020\u0025\u0059",
-						},
-						/***********************************************************************************/
-						//! INSERT("\n// Copyright 2016 Claude Petit, licensed under Apache License version 2.0\n")
-					},
-
+					current: null,
 					cache: {},
 					oldSetOptions: null,
 				};
+
+				var __Natives__ = {
+					windowParseInt: global.parseInt,
+					windowRegExp: global.RegExp,
+				};
 				
-				locale.LC_ALL = 'LC_ALL';
-				locale.LC_IDENTIFICATION = 'LC_IDENTIFICATION';
-				locale.LC_TIME = 'LC_TIME';
-					
-					
 				__Internal__.oldSetOptions = locale.setOptions;
 				locale.setOptions = function setOptions(/*paramarray*/) {
 					var options = __Internal__.oldSetOptions.apply(this, arguments),
 						settings = types.getDefault(options, 'settings', {});
 						
 					settings.enableDomObjectsModel = types.toBoolean(types.get(settings, 'enableDomObjectsModel'));
-					settings.defaultScriptTimeout = parseInt(types.get(settings, 'defaultScriptTimeout'));
+					settings.defaultScriptTimeout = __Natives__.windowParseInt(types.get(settings, 'defaultScriptTimeout'));
 				};
 				
 				locale.setOptions({
@@ -185,7 +90,7 @@
 							locate: function locate(fileName, /*optional*/options) {
 								return modules.locate('doodad-js-locale')
 									.then(function(location) {
-										return location.set({file: null}).combine(tools.getOptions().hooks.pathParser(locale.getOptions().settings.resourcesPath)).combine(tools.getOptions().hooks.pathParser(fileName));
+										return location.set({file: null}).combine(files.getOptions().hooks.pathParser(locale.getOptions().settings.resourcesPath)).combine(files.getOptions().hooks.pathParser(fileName));
 									});
 							},
 							load: function load(path, /*optional*/options) {
@@ -286,9 +191,56 @@
 						lastIndex = wordsSepRegEx.lastIndex;
 					};
 				};
+				
+				__Internal__.unicodeRegEx = /<U([0-9A-Fa-f]{4,8})>([.][.]<U([0-9A-Fa-f]{4,8})>)?/g;
+				
+				__Internal__.parseLocaleFileString = function parseLocaleFileString(str) {
+					return str.replace(__Internal__.unicodeRegEx, function (m, p1, p2, p3, o, s) {
+						var from = __Natives__.windowParseInt(p1, 16),
+							to = (p3 ? __Natives__.windowParseInt(p3, 16) : from),
+							result = '';
+						for (var code = from; code <= to; code++) {
+							result += unicode.fromCodePoint(code);
+						};
+						return result;
+					});
+				};
 
-				__Internal__.parseLocaleFile = function parseLocaleFile(data, sectionsDef, /*optional*/sectionFilter, /*optional*/sections) {
-					var Promise = tools.getPromise();
+				__Internal__.parseLocaleFileCodePoints = function parseLocaleFileCodePoints(str) {
+					var retval = [];
+					__Internal__.unicodeRegEx.lastIndex = 0;
+					var result = __Internal__.unicodeRegEx.exec(str);
+					var regexp = "";
+					while (result) {
+						var from = __Natives__.windowParseInt(result[1], 16),
+							to = (result[2] ? __Natives__.windowParseInt(result[3], 16) : from);
+						for (var code = from; code <= to; code++) {
+							// NOT NEEDED FOR THE MOMENT
+							//retval.push(code);
+							if ((from >= 0x10000) || (to >= 0x10000)) {
+								if (code >= 0x10000) {
+									var chr = unicode.fromCodePoint(code);
+									regexp += "|\\u" + ("000" + chr.charCodeAt(0).toString(16)).slice(-4) + "\\u" + ("000" + chr.charCodeAt(1).toString(16)).slice(-4);
+								} else {
+									regexp += "|\\u" + ("000" + code.toString(16)).slice(-4);
+								};
+							};
+						};
+						if ((from < 0x10000) && (to < 0x10000)) {
+							if (from === to) {
+								regexp += "|\\u" + ("000" + from.toString(16)).slice(-4)
+							} else {
+								regexp += "|[\\u" + ("000" + from.toString(16)).slice(-4) + "-\\u" + ("000" + to.toString(16)).slice(-4) + "]"
+							};
+						};
+						result = __Internal__.unicodeRegEx.exec(str);
+					};
+					retval.regExpStr = regexp;
+					return retval;
+				};
+
+				__Internal__.parseLocaleFile = function parseLocaleFile(data, /*optional*/sectionFilter, /*optional*/sections, /*optional*/translit) {
+					var Promise = types.getPromise();
 					return new Promise(function(resolve, reject) {
 						var result,
 							chr,
@@ -304,19 +256,20 @@
 							words = null,
 							commentChar = '%',
 							escapeChar = '/',
-							wordsSepRegEx,
-							unicodeRegEx = /<U([0-9A-Fa-f]{4,})>/g;
+							wordsSepRegEx;
 
 						if (!sections) {
 							sections = {};
 						};
+						
+						translit = translit || 0;
 							
 						var createRegEx = function createRegEx() {
 							var lastIndex = 0;
 							if (wordsSepRegEx) {
 								lastIndex = wordsSepRegEx.lastIndex;
 							};
-							var newRegExp = new RegExp('(\\r\\n)+|(\\n\\r)+|\\r+|\\n+|\\t+|[ ]+|[;]|["]|' + tools.escapeRegExp(commentChar) + '|' + tools.escapeRegExp(escapeChar), 'g');
+							var newRegExp = new __Natives__.windowRegExp('(\\r\\n)+|(\\n\\r)+|\\r+|\\n+|\\t+|[ ]+|[;]|["]|' + tools.escapeRegExp(commentChar) + '|' + tools.escapeRegExp(escapeChar), 'g');
 							newRegExp.lastIndex = lastIndex;
 							return newRegExp;
 						};
@@ -354,21 +307,21 @@
 								if ((chr[0] === '\r') || (chr[0] === '\n')) {
 									isComment = false;
 								};
+							} else if (chr === commentChar) {
+								isComment = true;
 							} else if (isStr) {
 								word += str;
 								if ((chr[0] === '\r') || (chr[0] === '\n') || (chr === '"')) {
-									word = word.replace(unicodeRegEx, function(m, p1, o, s) {
-										return String.fromCharCode(parseInt(p1, 16));
-									});
+									word = __Internal__.parseLocaleFileString(word);
 									isStr = false;
 								} else {
 									word += chr;
 								};
 							} else if (chr === '"') {
 								isStr = true;
-							} else if (chr === commentChar) {
-								isComment = true;
 							} else if (variableName && (chr === ';')) {
+								// Array separator
+								word += str;
 								if (words) {
 									words.push(word);
 								} else {
@@ -386,15 +339,75 @@
 										if ((variableName === 'END') && (word === sectionName)) {
 											section = null;
 											sectionName = null;
-										} else if ((sectionName === 'LC_CTYPE') || (sectionName === 'LC_COLLATE')) {
-											// TODO: Parse these sections
+											translit = 0;
 										} else if (!sectionFilter || (sectionName === sectionFilter)) {
-											if (variableName === 'copy') {
+											if (sectionName === 'LC_COLLATE') {
+												// TODO: LC_COLLATE
+												//if (variableName === 'define') {
+												//} else if (variableName === 'ifdef') {
+												//} else if (variableName === 'ifndef') {
+												//} else if (variableName === 'else') {
+												//} else if ....
+												//....
+											} else if ( (variableName === 'include') || (variableName === 'copy') ) {
 												if (word) {
-													waiting.push(__Internal__.loadLocale(word, sectionName, sections));
+													waiting.push(__Internal__.loadLocale(word, sectionName, sections, translit));
 												};
-											} else if (variableName === 'include') {
-												// TODO:
+											} else if (sectionName === 'LC_CTYPE') {
+												if (variableName === 'translit_start') {
+													translit++;
+												} else if (variableName === 'translit_end') {
+													translit--;
+												} else if (translit > 0) {
+													// TODO: translit table
+												} else if ((variableName === 'class') || types.hasKey(section.classes, variableName)) {
+													if (word) {
+														if (words) {
+															words.push(word);
+														} else {
+															words = [word];
+														};
+													};
+													if (variableName === 'class') {
+														variableName = words.shift();
+													};
+													var cls = tools.reduce(words, function(result, value) {
+														var codePoints = __Internal__.parseLocaleFileCodePoints(value);
+														// NOT NEEDED FOR THE MOMENT
+														//for (var i = 0; i < codePoints.length; i++) {
+														//	var codePoint = codePoints[i];
+														//	result.chars.push(unicode.fromCodePoint(codePoint));
+														//};
+														result.regExpStr += codePoints.regExpStr;
+														return result;
+													}, {
+														// NOT NEEDED FOR THE MOMENT
+														//chars: [],
+														regExpStr: '',
+														regExp: null,
+													});
+													cls.regExpStr = cls.regExpStr.slice(1);
+													cls.regExp = new __Natives__.windowRegExp(cls.regExpStr);
+													section.classes[variableName] = cls;
+												} else if ((variableName === 'map') || types.hasKey(section.maps, variableName)) {
+													// NOT NEEDED FOR THE MOMEMT
+													// if (word) {
+														// if (words) {
+															// words.push(word);
+														// } else {
+															// words = [word];
+														// };
+													// };
+													// if (variableName === 'map') {
+														// variableName = words.shift();
+													// };
+													// section.maps[variableName] = words.map(function(value) {
+														// var parts = value.slice(1, -1).split(',', 2);
+														// var result = {};
+														// result[__Internal__.parseLocaleFileString(parts[0])] = __Internal__.parseLocaleFileString(parts[1]);
+														// return result;
+													// });
+												};
 											} else if (variableName && word) {
 												if (words) {
 													words.push(word);
@@ -425,16 +438,22 @@
 										sectionName = variableName;
 										section = types.get(sections, sectionName);
 										if (!section) {
-											sections[sectionName] = section = {};
+											if (sectionName === 'LC_CTYPE') {
+												section = {
+													classes: { upper: {}, lower: {}, alpha: {}, digit: {}, outdigit: {}, space: {}, cntrl: {}, punct: {}, graph: {}, print: {}, xdigit: {}, blank: {}},
+													maps: { toupper: [], tolower: [] },
+												};
+											} else {
+												section = {};
+											};
+											sections[sectionName] = section;
 										};
 									};
-									variableName = null;
 									words = null;
 									word = '';
+									variableName = null;
 								} else if (!section) {
-									if ((variableName === 'escape_char') || (variableName === 'comment_char')) {
-										directive = variableName;
-									};
+									directive = variableName;
 									variableName = null;
 								};
 							};
@@ -451,12 +470,12 @@
 				};
 				
 				__Internal__.loadCategories = function loadCategories() {
-					var Promise = tools.getPromise();
+					var Promise = types.getPromise();
 					if (__Internal__.categories) {
 						return Promise.resolve();
 					};
 					__Internal__.categories = {};
-					return locale.getOptions().hooks.resourcesLoader.locate(tools.getOptions().hooks.pathParser(locale.getOptions().settings.localesPath).combine(tools.getOptions().hooks.pathParser('categories.def')))
+					return locale.getOptions().hooks.resourcesLoader.locate(files.getOptions().hooks.pathParser(locale.getOptions().settings.localesPath).combine(files.getOptions().hooks.pathParser('categories.def')))
 						.then(function(path) {
 							return locale.getOptions().hooks.resourcesLoader.load(path)
 								.then(function proceed(data) {
@@ -477,8 +496,8 @@
 												name: name,
 												standard: standard,
 												type: type,
-												min: min && parseInt(min) || undefined,
-												max: max && parseInt(max) || undefined,
+												min: min && __Natives__.windowParseInt(min) || undefined,
+												max: max && __Natives__.windowParseInt(max) || undefined,
 											};
 										},
 									}, {
@@ -493,18 +512,18 @@
 						});
 				};
 
-				__Internal__.loadLocale = function loadLocaleInternal(name, /*optional*/category, /*optional*/sections) {
-					var Promise = tools.getPromise();
+				__Internal__.loadLocale = function loadLocaleInternal(name, /*optional*/category, /*optional*/sections, /*optional*/translit) {
+					var Promise = types.getPromise();
 					var cached = !sections && types.get(__Internal__.cache, name);
 					if (cached) {
 						return Promise.resolve(cached);
 					};
-					return locale.getOptions().hooks.resourcesLoader.locate(tools.getOptions().hooks.pathParser(locale.getOptions().settings.localesPath).combine(tools.getOptions().hooks.pathParser(name)))
+					return locale.getOptions().hooks.resourcesLoader.locate(files.getOptions().hooks.pathParser(locale.getOptions().settings.localesPath).combine(files.getOptions().hooks.pathParser(name)))
 						.then(function(path) {
 							return locale.getOptions().hooks.resourcesLoader.load(path)
 								.then(function proceed(data) {
 									//console.log(data);
-									return __Internal__.parseLocaleFile(data, __Internal__.categories, category, sections)
+									return __Internal__.parseLocaleFile(data, category, sections, translit)
 										.then(function (loc) {
 											if ((!category || (category === locale.LC_ALL)) && !sections) {
 												__Internal__.cache[name] = loc;
@@ -542,12 +561,6 @@
 				
 				return function init(/*optional*/options) {
 					return __Internal__.loadCategories();
-						
-					//// Test
-					//return locale.loadLocale('fr_CA').nodeify(function(err, locale) {
-					//	console.log(err);
-					//	console.log(locale);
-					//});
 				};
 			},
 		};

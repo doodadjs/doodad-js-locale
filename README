@@ -11,7 +11,7 @@ $ npm install doodad-js-locale
 ## Features
 
   -  Provides GNU-C's locales data as objects.
-  -  Doesn't currently support LC_COLLATE and LC_CTYPE, but it will eventually.
+  -  Doesn't currently support LC_COLLATE, but it will eventually.
 
 ## Quick Start
 
@@ -21,6 +21,7 @@ $ npm install doodad-js-locale
     const root = require('doodad-js').createRoot( null, { node_env: 'development' } );
 
     const modules = {};
+    require('doodad-js-unicode').add(modules);
     require('doodad-js-locale').add(modules);
 
     function startup() {
@@ -30,7 +31,7 @@ $ npm install doodad-js-locale
         });
     };
 
-    root.Doodad.Namespaces.loadNamespaces( startup, false, null, modules )
+    root.Doodad.Namespaces.loadNamespaces( modules, startup )
         ['catch'](function(err) {
             console.error(err);
         });
