@@ -213,17 +213,44 @@
 					var regexp = "";
 					while (result) {
 						var from = __Natives__.windowParseInt(result[1], 16),
-							to = (result[2] ? __Natives__.windowParseInt(result[3], 16) : from);
+							to = (result[2] ? __Natives__.windowParseInt(result[3], 16) : from),
+							currentLeadSurrogate = -1,
+							firstTailSurrogate = -1,
+							lastTailSurrogate = -1;
 						for (var code = from; code <= to; code++) {
 							// NOT NEEDED FOR THE MOMENT
 							//retval.push(code);
 							if ((from >= 0x10000) || (to >= 0x10000)) {
 								if (code >= 0x10000) {
-									var chr = unicode.fromCodePoint(code);
-									regexp += "|\\u" + ("000" + chr.charCodeAt(0).toString(16)).slice(-4) + "\\u" + ("000" + chr.charCodeAt(1).toString(16)).slice(-4);
+									var surrogates = unicode.codePointToCharCodes(code);
+									if (from === to) {
+										regexp += "|\\u" + ("000" + surrogates.leadSurrogate.toString(16)).slice(-4) + "\\u" + ("000" + surrogates.tailSurrogate.toString(16)).slice(-4);
+									} else {
+										if (surrogates.leadSurrogate !== currentLeadSurrogate) {
+											if (firstTailSurrogate >= 0) {
+												regexp += "|\\u" + ("000" + currentLeadSurrogate.toString(16)).slice(-4);
+												if (firstTailSurrogate === lastTailSurrogate) {
+													regexp += "\\u" + ("000" + firstTailSurrogate.toString(16)).slice(-4);
+												} else {
+													regexp += "[\\u" + ("000" + firstTailSurrogate.toString(16)).slice(-4) + "-\\u" + ("000" + lastTailSurrogate.toString(16)).slice(-4) + "]";
+												};
+											};
+											currentLeadSurrogate = surrogates.leadSurrogate;
+											firstTailSurrogate = surrogates.tailSurrogate;
+										};
+										lastTailSurrogate = surrogates.tailSurrogate;
+									};
 								} else {
 									regexp += "|\\u" + ("000" + code.toString(16)).slice(-4);
 								};
+							};
+						};
+						if (firstTailSurrogate >= 0) {
+							regexp += "|\\u" + ("000" + currentLeadSurrogate.toString(16)).slice(-4);
+							if (firstTailSurrogate === lastTailSurrogate) {
+								regexp += "\\u" + ("000" + firstTailSurrogate.toString(16)).slice(-4);
+							} else {
+								regexp += "[\\u" + ("000" + firstTailSurrogate.toString(16)).slice(-4) + "-\\u" + ("000" + lastTailSurrogate.toString(16)).slice(-4) + "]";
 							};
 						};
 						if ((from < 0x10000) && (to < 0x10000)) {
@@ -236,6 +263,7 @@
 						result = __Internal__.unicodeRegEx.exec(str);
 					};
 					retval.regExpStr = regexp;
+//console.log(regexp);
 					return retval;
 				};
 
