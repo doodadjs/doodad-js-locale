@@ -26,6 +26,34 @@
 	"//": "",
 	"makeData": {
 		"tasks": {
+			"locales": {
+				"operations": [
+					{
+						"class": "Make.Modules.Load",
+						"names": [
+							"doodad-js-unicode", 
+							[
+								"doodad-js-locale", 
+								"src/make/Tools_Locale_Make.js"
+							]
+						]
+					},
+					{
+						"class": "Make.Folder.Create",
+						"destination": "%PACKAGEDIR%/locales"
+					},
+					{
+						"class": "Make.File.Copy",
+						"source": "%SOURCEDIR%/common/res/locales/LICENSE",
+						"destination": "%PACKAGEDIR%/locales/LICENSE"
+					},
+					{
+						"class": "Doodad.Tools.Locale.Make.Database",
+						"source": "%SOURCEDIR%/common/res/locales",
+						"destination": "%PACKAGEDIR%/locales"
+					}
+				]
+			},
 			"make": {
 				"operations": [
 					{
@@ -35,9 +63,10 @@
 						"runDirectives": true
 					},
 					{
-						"class": "Make.Folder.Copy",
-						"source": "%SOURCEDIR%/common/res",
-						"destination": "%PACKAGEDIR%/res"
+						"class": "Make.File.Javascript",
+						"source": "%SOURCEDIR%/common/Tools_Locale_Unicode.js",
+						"destination": "%PACKAGEDIR%/Tools_Locale_Unicode.min.js",
+						"runDirectives": true
 					},
 					
 					{
@@ -68,9 +97,15 @@
 						"runDirectives": true
 					},
 					{
-						"class": "Make.Folder.Copy",
-						"source": "%SOURCEDIR%/common/res",
-						"destination": "%INSTALLDIR%/%PACKAGENAME%/res"
+						"class": "Make.File.Copy",
+						"source": "%SOURCEDIR%/common/Tools_Locale_Unicode.js",
+						"destination": "%INSTALLDIR%/%PACKAGENAME%/Tools_Locale_Unicode.js"
+					},
+					{
+						"class": "Make.File.Javascript",
+						"source": "%SOURCEDIR%/common/Tools_Locale_Unicode.js",
+						"destination": "%INSTALLDIR%/%PACKAGENAME%/Tools_Locale_Unicode.min.js",
+						"runDirectives": true
 					},
 					{
 						"class": "Make.File.Copy",
@@ -87,31 +122,15 @@
 						"destination": "%INSTALLDIR%/%PACKAGENAME%/index.js",
 						"runDirectives": true
 					},
+					{
+						"class": "Make.Folder.Copy",
+						"source": "%PACKAGEDIR%/locales",
+						"destination": "%INSTALLDIR%/%PACKAGENAME%/locales"
+					},
 
 					{
 						"class": "Make.Generate.Configuration",
 						"destination": "%PACKAGEDIR%/config.json"
-					},
-					
-					{
-						"class": "Make.Task",
-						"name": "browserify"
-					}
-				]
-			},
-			"browserify": {
-				"operations": [
-					{
-						"class": "Make.Folder.Create",
-						"destination": "%PACKAGEDIR%/browserify/"
-					},
-					{
-						"class": "Make.Browserify.Resources",
-						"name": "%PACKAGENAME%-res",
-						"namespace": "Doodad.Tools.Locale",
-						"source": "%SOURCEDIR%/common/res/",
-						"destination": "%PACKAGEDIR%/browserify/",
-						"resourcesFile": "resources.js"
 					}
 				]
 			}

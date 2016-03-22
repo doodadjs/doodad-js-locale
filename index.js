@@ -35,7 +35,7 @@
 		DD_MODULES = (DD_MODULES || {});
 		DD_MODULES[MODULE_NAME] = {
 			type: 'Package',
-			version: '1.3.0r',
+			version: '2.0.0r',
 			namespaces: null,
 			dependencies: ['Doodad.Modules'],
 			exports: exports,
@@ -48,7 +48,10 @@
 				
 				var fromSource = root.getOptions().settings.fromSource;
 
-				return modules.load(MODULE_NAME, (fromSource ? (global.process ? 'src/common/Tools_Locale.js' : 'Tools_Locale.js') : 'Tools_Locale.min.js'), _options);
+				return modules.load(MODULE_NAME, [
+						(fromSource ? (global.process ? 'src/common/Tools_Locale.js' : 'Tools_Locale.js') : 'Tools_Locale.min.js'),
+						(fromSource ? (global.process ? 'src/common/Tools_Locale_Unicode.js' : 'Tools_Locale_Unicode.js') : 'Tools_Locale_Unicode.min.js')
+					], _options);
 			},
 		};
 		return DD_MODULES;

@@ -12,6 +12,7 @@ $ npm install doodad-js-locale
 
   -  Provides GNU-C's locales data as objects.
   -  Doesn't currently support LC_COLLATE, but it will eventually.
+  -  Test a character for an Unicode character class.
 
 ## Quick Start
 
