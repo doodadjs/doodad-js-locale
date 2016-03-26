@@ -27,11 +27,19 @@ module.exports = {
 	add: function add(DD_MODULES) {
 		DD_MODULES = (DD_MODULES || {});
 		DD_MODULES['doodad-js-locale'] = {
-			type: null,
-			version: '2.0.0r',
+			type: 'Package',
+			//! INSERT("version:'" + VERSION('doodad-js-locale') + "',")
 			namespaces: null,
-			dependencies: null,
-			exports: module.exports,
+			dependencies: [
+				{
+					name: 'doodad-js',
+					//! INSERT("version:'" + VERSION('doodad-js') + "',")
+				},
+				{
+					name: 'doodad-js-unicode',
+					//! INSERT("version:'" + VERSION('doodad-js-unicode') + "',")
+				},
+			],
 			
 			create: function create(root, /*optional*/_options) {
 				var config = null;
@@ -43,8 +51,12 @@ module.exports = {
 				var modules = {};
 				
 				require("./dist/doodad-js-locale/Tools_Locale.min.js").add(modules);
+				require("./dist/doodad-js-locale/Tools_Locale_Unicode.min.js").add(modules);
 				
-				return root.Doodad.Namespaces.loadNamespaces(modules, null, config, false);
+				return root.Doodad.Namespaces.loadNamespaces(modules, null, config, false)
+					.then(function() {
+						// Returns nothing
+					});
 			},
 		};
 		return DD_MODULES;

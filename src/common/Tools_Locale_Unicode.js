@@ -35,21 +35,11 @@
 		DD_MODULES = (DD_MODULES || {});
 		DD_MODULES['Doodad.Tools.Locale.Unicode'] = {
 			type: null,
-			version: '2.0.0r',
+			//! INSERT("version:'" + VERSION('doodad-js-locale') + "',")
 			namespaces: null,
 			dependencies: [
-				{
-					name: 'Doodad.Tools',
-					version: '2.2.0',
-				},
-				{
-					name: 'Doodad.Types',
-					version: '2.2.0',
-				},
 				'Doodad.Tools.Locale',
-				'Doodad.Tools.Unicode',
 			],
-			exports: exports,
 			
 			create: function create(root, /*optional*/_options) {
 				"use strict";

@@ -38,19 +38,9 @@
 			version: '0.1.0a',
 			namespaces: null,
 			dependencies: [
-				{
-					name: 'Doodad.Tools',
-					version: '2.2.0',
-				},
-				{
-					name: 'Doodad.Types',
-					version: '2.2.0',
-				},
-				'Doodad.Tools.Files',
-				'Doodad.Tools.Unicode',
-				'Make',
+				'doodad-js-unicode',
+				'doodad-js-make',
 			],
-			exports: exports,
 			
 			create: function create(root, /*optional*/_options) {
 				"use strict";

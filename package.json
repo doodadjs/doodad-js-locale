@@ -1,7 +1,8 @@
 {
   "name": "doodad-js-locale",
-  "version": "2.0.0",
-  "description": "Locales provider.",
+  "version": "2.1.0",
+  "stage": "r",
+  "description": "GNU-C locales data provider.",
   "homepage": "https://sourceforge.net/projects/doodad-js/",
   "config": {
     "Doodad__Tools__Locale": {
@@ -34,7 +35,8 @@
   "keywords": [
     "doodad-js",
     "locale",
-    "unicode"
+    "unicode",
+	"gnu c"
   ],
   "author": "Claude Petit <doodadjs@gmail.com> (https://sourceforge.net/projects/doodad-js/)",
   "license": "Apache-2.0",
