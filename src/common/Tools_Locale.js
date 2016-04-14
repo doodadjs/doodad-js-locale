@@ -63,10 +63,6 @@
 				//var __Natives__ = {
 				//};
 				
-				//__Internal__.oldSetOptions = locale.setOptions;
-				//locale.setOptions = function setOptions(/*paramarray*/) {
-				//};
-				
 				locale.setOptions({
 					localesPath: './locales/', // Combined with package's root folder
 					hooks: {

@@ -1,6 +1,6 @@
 {
   "name": "doodad-js-locale",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "stage": "r",
   "description": "GNU-C locales data provider.",
   "config": {
