@@ -1,4 +1,4 @@
-//! REPLACE_BY("// Copyright 2016 Claude Petit, licensed under Apache License version 2.0\n")
+//! REPLACE_BY("// Copyright 2016 Claude Petit, licensed under Apache License version 2.0\n", true)
 // dOOdad - Object-oriented programming framework
 // File: Tools_Locale_Make.js - Make extension
 // Project home: https://sourceforge.net/projects/doodad-js/
@@ -27,16 +27,21 @@
 	const global = this;
 	
 	const exports = {};
-	if (typeof process === 'object') {
-		module.exports = exports;
+	
+	//! BEGIN_REMOVE()
+	if ((typeof process === 'object') && (typeof module === 'object')) {
+	//! END_REMOVE()
+		//! IF_DEF("serverSide")
+			module.exports = exports;
+		//! END_IF()
+	//! BEGIN_REMOVE()
 	};
+	//! END_REMOVE()
 	
 	exports.add = function add(DD_MODULES) {
 		DD_MODULES = (DD_MODULES || {});
 		DD_MODULES['Doodad.Tools.Locale.Make'] = {
-			type: null,
 			version: '0.1.0a',
-			namespaces: null,
 			dependencies: [
 				'doodad-js-unicode',
 				'doodad-js-make',
@@ -403,25 +408,45 @@
 						const Promise = types.getPromise();
 						let source = item.source;
 						if (types.isString(source)) {
-							source = make.parseVariables(source, { isPath: true });
+							source = this.taskData.parseVariables(source, { isPath: true });
 						};
 						let dest = item.destination;
 						if (types.isString(dest)) {
-							dest = make.parseVariables(dest, { isPath: true });
+							dest = this.taskData.parseVariables(dest, { isPath: true });
 						};
 						console.info('Compiling locales database (this may take a while)...');
+						function proceedItems(items, index) {
+							if (index < items.length) {
+								const name = items[index];
+								console.log("    " + name + " (" + (index + 1) + " of " + items.length + ")");
+								return __Internal__.loadLocale(source, name)
+									.then(function(loc) {
+										return new Promise(function(resolve, reject) {
+											try {
+												nodeFs.writeFile(dest.combine(name + '.json').toString(), JSON.stringify(loc), {encoding: 'utf-8'}, function(err) {
+													if (err) {
+														reject(err);
+													} else {
+														resolve();
+													};
+												});
+											} catch(ex) {
+												reject(ex);
+											};
+										});
+									})
+									.then(function() {
+										return proceedItems(items, index + 1);
+									});
+							} else {
+								// Done
+								return Promise.resolve();
+							};
+						};
 						return files.readFile(source.combine('list.txt'), {async: true, encoding: 'utf-8'})
 							.then(function(list) {
-								const items = list.replace(/(\r\n)|(\n\r)|\n|\r/g, '\n').split('\n');
-								return Promise.all(tools.map(items, function(name) {
-									if (name) {
-										return __Internal__.loadLocale(source, name)
-											.then(function(loc) {
-												// TODO: Async
-												nodeFs.writeFileSync(dest.combine(name + '.json').toString(), JSON.stringify(loc), {encoding: 'utf-8'});
-											});
-									};
-								}));
+								const items = list.replace(/(\r\n)|(\n\r)|\n|\r/g, '\n').split('\n').filter(function(name) {return !!name});
+								return proceedItems(items, 0);
 							});
 					}),
 				}));
@@ -438,8 +463,23 @@
 		return DD_MODULES;
 	};
 	
-	if (typeof process !== 'object') {
-		// <PRB> export/import are not yet supported in browsers
-		global.DD_MODULES = exports.add(global.DD_MODULES);
+	//! BEGIN_REMOVE()
+	if ((typeof process !== 'object') || (typeof module !== 'object')) {
+	//! END_REMOVE()
+		//! IF_UNDEF("serverSide")
+			// <PRB> export/import are not yet supported in browsers
+			global.DD_MODULES = exports.add(global.DD_MODULES);
+		//! END_IF()
+	//! BEGIN_REMOVE()
 	};
-}).call((typeof global !== 'undefined') ? global : ((typeof window !== 'undefined') ? window : this));
+	//! END_REMOVE()
+}).call(
+	//! BEGIN_REMOVE()
+	(typeof window !== 'undefined') ? window : ((typeof global !== 'undefined') ? global : this)
+	//! END_REMOVE()
+	//! IF_DEF("serverSide")
+	//! 	INJECT("global")
+	//! ELSE()
+	//! 	INJECT("window")
+	//! END_IF()
+);

@@ -1,63 +1,29 @@
 {
   "name": "doodad-js-locale",
-  "version": "2.1.0",
+  "version": "2.2.3",
   "stage": "r",
   "description": "GNU-C locales data provider.",
-  "homepage": "https://sourceforge.net/projects/doodad-js/",
   "config": {
     "Doodad__Tools__Locale": {
-      "settings": {
         "localesPath": "./locales/"
-      }
     }
   },
   "main": "index.js",
   "files": [
-    "src",
-    "dist",
 	"locales",
-    "Tools_Locale.min.js",
-    "Tools_Locale_Unicode.min.js",
-    "index.js",
-    "make.json",
     "README",
-    "LICENSE",
-	"tonic.js",
-	"browserify",
-	"browserify.js",
-	"resources.templ.js"
+	"tonic.js"
   ],
-  "scripts": {
-    "prepublish": "node -r \"doodad-js-make/make.js\" . make",
-    "configure": "node -r \"doodad-js-make/make.js\" . custom=configure",
-    "locales": "node -r \"doodad-js-make/make.js\" . custom=locales"
-  },
   "keywords": [
     "doodad-js",
     "locale",
     "unicode",
 	"gnu c"
   ],
-  "author": "Claude Petit <doodadjs@gmail.com> (https://sourceforge.net/projects/doodad-js/)",
-  "license": "Apache-2.0",
-  "engines": {
-    "node": ">=4.2.0 <6.0.0"
-  },
-  "repository": {
-    "type": "svn",
-    "url": "https://svn.code.sf.net/p/doodad-js/code/trunk/node_modules/doodad-js-locale/"
-  },
-  "bugs": {
-    "url" : "https://sourceforge.net/p/doodad-js/tickets/",
-    "email" : "doodadjs@gmail.com"
+  "scripts": {
+	"locales": "node -r \"doodad-js-make/make.js\" . custom=locales"
   },
   "dependencies": {
-    "doodad-js": "^2.2.0",
-    "doodad-js-unicode": "^0.3.0"
   },
-  "devDependencies": {
-    "doodad-js-make": "^0.3.2"
-  },
-  "tonicExampleFilename": "tonic.js",
-  "browser": "./browserify.js"
+  "tonicExampleFilename": "tonic.js"
 }
