@@ -141,12 +141,6 @@
 					return unicode.isClass('cntrl', chr, localeData);
 				};
 				
-/*
-// TODO: See if Javascript's "toLowerCase" and "toUpperCase" functions are equivalent (has the same mappings)
-Function: wint_t towlower (wint_t wc)
-Function: wint_t towupper (wint_t wc)
-
-*/
 
 				//===================================
 				// Init
