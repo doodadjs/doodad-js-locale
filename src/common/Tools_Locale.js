@@ -99,7 +99,7 @@
 				
 				
 				locale.loadLocale = function loadLocale(name) {
-					if (types.hasKey(__Internal__.cache, name)) {
+					if (types.has(__Internal__.cache, name)) {
 						var Promise = types.getPromise();
 						return Promise.resolve(__Internal__.cache[name]);
 					} else {

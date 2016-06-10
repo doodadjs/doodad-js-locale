@@ -277,7 +277,7 @@
 													translit--;
 												} else if (translit > 0) {
 													// TODO: translit table
-												} else if ((variableName === 'class') || types.hasKey(section.classes, variableName)) {
+												} else if ((variableName === 'class') || types.has(section.classes, variableName)) {
 													if (word) {
 														if (words) {
 															words.push(word);
@@ -305,7 +305,7 @@
 													});
 													cls.regExpStr = cls.regExpStr.slice(1);
 													section.classes[variableName] = cls;
-												} else if ((variableName === 'map') || types.hasKey(section.maps, variableName)) {
+												} else if ((variableName === 'map') || types.has(section.maps, variableName)) {
 													// NOT NEEDED FOR THE MOMEMT
 													// if (word) {
 														// if (words) {
@@ -327,7 +327,7 @@
 											} else if (variableName && word) {
 												if (words) {
 													words.push(word);
-													if (types.hasKey(section, variableName)) {
+													if (types.has(section, variableName)) {
 														const val = section[variableName];
 														if (!types.isArray(val)) {
 															section[variableName] = val = [val];
@@ -337,7 +337,7 @@
 														section[variableName] = words;
 													};
 												} else {
-													if (types.hasKey(section, variableName)) {
+													if (types.has(section, variableName)) {
 														const val = section[variableName];
 														if (types.isArray(val)) {
 															val.push(word);
