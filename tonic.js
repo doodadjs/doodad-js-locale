@@ -13,7 +13,6 @@ function startup() {
 	});
 };
 
-root.Doodad.Namespaces.load( modules, startup )
-	['catch'](function(err) {
+root.Doodad.Namespaces.load( modules, startup )['catch'](function(err) {
 		console.error(err);
 	});

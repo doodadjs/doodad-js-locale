@@ -47,7 +47,7 @@
 				'doodad-js-make',
 			],
 			
-			create: function create(root, /*optional*/_options) {
+			create: function create(root, /*optional*/_options, _shared) {
 				"use strict";
 
 				//===================================
@@ -69,10 +69,10 @@
 				// Natives
 				//===================================
 					
-				const __Natives__ = {
+				types.complete(_shared.Natives, {
 					windowParseInt: global.parseInt,
 					windowRegExp: global.RegExp,
-				};
+				});
 					
 				//===================================
 				// Internal
@@ -85,8 +85,8 @@
 				
 				__Internal__.parseLocaleFileString = function parseLocaleFileString(str) {
 					return str.replace(__Internal__.unicodeRegEx, function (m, p1, p2, p3, o, s) {
-						const from = __Natives__.windowParseInt(p1, 16),
-							to = (p3 ? __Natives__.windowParseInt(p3, 16) : from);
+						const from = _shared.Natives.windowParseInt(p1, 16),
+							to = (p3 ? _shared.Natives.windowParseInt(p3, 16) : from);
 						let result = '';
 						for (let code = from; code <= to; code++) {
 							result += unicode.fromCodePoint(code);
@@ -101,8 +101,8 @@
 					let result = __Internal__.unicodeRegEx.exec(str);
 					let regexp = "";
 					while (result) {
-						const from = __Natives__.windowParseInt(result[1], 16),
-							to = (result[2] ? __Natives__.windowParseInt(result[3], 16) : from);
+						const from = _shared.Natives.windowParseInt(result[1], 16),
+							to = (result[2] ? _shared.Natives.windowParseInt(result[3], 16) : from);
 						let currentLeadSurrogate = -1,
 							firstTailSurrogate = -1,
 							lastTailSurrogate = -1;
@@ -158,7 +158,7 @@
 
 				__Internal__.parseLocaleFile = function parseLocaleFile(rootPath, data, /*optional*/sectionFilter, /*optional*/sections, /*optional*/translit) {
 					const Promise = types.getPromise();
-					return new Promise(function(resolve, reject) {
+					return Promise.create(function parseLocaleFilePromise(resolve, reject) {
 						let result,
 							chr,
 							lastIndex = 0,
@@ -186,7 +186,7 @@
 							if (wordsSepRegEx) {
 								lastIndex = wordsSepRegEx.lastIndex;
 							};
-							const newRegExp = new __Natives__.windowRegExp('(\\r\\n)+|(\\n\\r)+|\\r+|\\n+|\\t+|[ ]+|[;]|["]|' + tools.escapeRegExp(commentChar) + '|' + tools.escapeRegExp(escapeChar), 'g');
+							const newRegExp = new _shared.Natives.windowRegExp('(\\r\\n)+|(\\n\\r)+|\\r+|\\n+|\\t+|[ ]+|[;]|["]|' + tools.escapeRegExp(commentChar) + '|' + tools.escapeRegExp(escapeChar), 'g');
 							newRegExp.lastIndex = lastIndex;
 							return newRegExp;
 						};
@@ -389,8 +389,7 @@
 				__Internal__.loadLocale = function loadLocaleInternal(rootPath, name, /*optional*/category, /*optional*/sections, /*optional*/translit) {
 		//console.log(name);
 					const Promise = types.getPromise();
-					const filesOptions = files.getOptions();
-					rootPath = filesOptions.hooks.pathParser(rootPath);
+					rootPath = _shared.pathParser(rootPath);
 					const path = rootPath.combine(name);
 					return files.readFile(path, {async: true})
 						.then(function(data) {
@@ -421,18 +420,14 @@
 								console.log("    " + name + " (" + (index + 1) + " of " + items.length + ")");
 								return __Internal__.loadLocale(source, name)
 									.then(function(loc) {
-										return new Promise(function(resolve, reject) {
-											try {
-												nodeFs.writeFile(dest.combine(name + '.json').toString(), JSON.stringify(loc), {encoding: 'utf-8'}, function(err) {
-													if (err) {
-														reject(err);
-													} else {
-														resolve();
-													};
-												});
-											} catch(ex) {
-												reject(ex);
-											};
+										return Promise.create(function nodeFsWriteFilePromise(resolve, reject) {
+											nodeFs.writeFile(dest.combine(name + '.json').toString(), JSON.stringify(loc), {encoding: 'utf-8'}, function(err) {
+												if (err) {
+													reject(err);
+												} else {
+													resolve();
+												};
+											});
 										});
 									})
 									.then(function() {

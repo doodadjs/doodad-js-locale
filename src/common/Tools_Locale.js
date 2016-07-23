@@ -43,7 +43,7 @@
 		DD_MODULES['Doodad.Tools.Locale'] = {
 			version: /*! REPLACE_BY(TO_SOURCE(VERSION(MANIFEST("name")))) */ null /*! END_REPLACE() */,
 			
-			create: function create(root, /*optional*/_options) {
+			create: function create(root, /*optional*/_options, _shared) {
 				"use strict";
 
 				var doodad = root.Doodad,
@@ -60,37 +60,47 @@
 					cache: {},
 				};
 
-				//var __Natives__ = {
-				//};
+				//types.complete(_shared.Natives, {
+				//});
 				
-				locale.setOptions({
+				var __options__ = types.extend({
 					localesPath: './locales/', // Combined with package's root folder
-					hooks: {
-						// TODO: Make a better and common resources locator and loader
-						resourcesLoader: {
-							locate: function locate(fileName, /*optional*/options) {
-								return modules.locate('doodad-js-locale')
-									.then(function(location) {
-										var filesOptions = files.getOptions();
-										var localeOptions = locale.getOptions();
-										var localesPath = filesOptions.hooks.pathParser(localeOptions.localesPath);
-										var filePath = filesOptions.hooks.pathParser(fileName);
-										return location.set({file: null})
-											.combine(localesPath)
-											.combine(filePath);
-									});
-							},
-							load: function load(path, /*optional*/options) {
-								var headers = {
-									Accept: 'application/json',
-								};
-								var file = files.readFile(path, { async: true, encoding: 'utf-8', enableCache: true, headers: headers });
-								return file;
-							},
-						},
-					},
 				}, _options);
+
+				//__options__. = types.to....(__options__.);
+
+				types.freezeObject(__options__);
+
+				locale.getOptions = function() {
+					return __options__;
+				};
 				
+
+				// TODO: Make a better and common resources locator and loader
+				__Internal__.resourcesLoader = {
+					locate: function locate(fileName, /*optional*/options) {
+						return modules.locate('doodad-js-locale')
+							.then(function(location) {
+								var localesPath = _shared.pathParser(__options__.localesPath);
+								var filePath = _shared.pathParser(fileName);
+								return location.set({file: null})
+									.combine(localesPath)
+									.combine(filePath);
+							});
+					},
+					load: function load(path, /*optional*/options) {
+						var headers = {
+							Accept: 'application/json',
+						};
+						var file = files.readFile(path, { async: true, encoding: 'utf-8', enableCache: true, headers: headers });
+						return file;
+					},
+				};
+
+
+				locale.setResourcesLoader = function setResourcesLoader(loader) {
+					__Internal__.resourcesLoader = loader;
+				};
 				
 				__Internal__.parseLocale = function parseLocale(data) {
 					data = JSON.parse(data);
@@ -103,8 +113,7 @@
 						var Promise = types.getPromise();
 						return Promise.resolve(__Internal__.cache[name]);
 					} else {
-						var localeOptions = locale.getOptions();
-						var loader = localeOptions.hooks.resourcesLoader;
+						var loader = __Internal__.resourcesLoader;
 						return loader.locate(name + '.json')
 							.then(function(path) {
 								return loader.load(path);

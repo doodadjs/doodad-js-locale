@@ -46,7 +46,7 @@
 				'Doodad.Tools.Locale',
 			],
 			
-			create: function create(root, /*optional*/_options) {
+			create: function create(root, /*optional*/_options, _shared) {
 				"use strict";
 
 				//===================================
@@ -63,9 +63,9 @@
 				// Natives
 				//===================================
 				
-				var __Natives__ = {
+				types.complete(_shared.Natives, {
 					windowRegExp: global.RegExp,
-				};
+				});
 				
 				//===================================
 				// Internal
@@ -88,7 +88,7 @@
 						throw new types.Error("Unknow Unicode class '~0~'.", [className]);
 					};
 					if (types.isNothing(cls.regExp)) {
-						cls.regExp = new __Natives__.windowRegExp("^(" + cls.regExpStr + ")+$");
+						cls.regExp = new _shared.Natives.windowRegExp("^(" + cls.regExpStr + ")+$");
 					};
 					return cls.regExp.test(chr);
 				};
