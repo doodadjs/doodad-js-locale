@@ -1,8 +1,9 @@
-﻿//! REPLACE_BY("// Copyright 2016 Claude Petit, licensed under Apache License version 2.0\n", true)
-// dOOdad - Object-oriented programming framework
+//! BEGIN_MODULE()
+
+//! REPLACE_BY("// Copyright 2016 Claude Petit, licensed under Apache License version 2.0\n", true)
+// doodad-js - Object-oriented programming framework
 // File: Tools_Locale.js - Useful locale tools
-// Project home: https://sourceforge.net/projects/doodad-js/
-// Trunk: svn checkout svn://svn.code.sf.net/p/doodad-js/code/trunk doodad-js-code
+// Project home: https://github.com/doodadjs/
 // Author: Claude Petit, Quebec city
 // Contact: doodadjs [at] gmail.com
 // Note: I'm still in alpha-beta stage, so expect to find some bugs or incomplete parts !
@@ -23,26 +24,11 @@
 //	limitations under the License.
 //! END_REPLACE()
 
-(function() {
-	var global = this;
-
-	var exports = {};
-	
-	//! BEGIN_REMOVE()
-	if ((typeof process === 'object') && (typeof module === 'object')) {
-	//! END_REMOVE()
-		//! IF_DEF("serverSide")
-			module.exports = exports;
-		//! END_IF()
-	//! BEGIN_REMOVE()
-	};
-	//! END_REMOVE()
-	
-	exports.add = function add(DD_MODULES) {
+module.exports = {
+	add: function add(DD_MODULES) {
 		DD_MODULES = (DD_MODULES || {});
 		DD_MODULES['Doodad.Tools.Locale'] = {
-			version: /*! REPLACE_BY(TO_SOURCE(VERSION(MANIFEST("name")))) */ null /*! END_REPLACE() */,
-			
+			version: /*! REPLACE_BY(TO_SOURCE(VERSION(MANIFEST("name")))) */ null /*! END_REPLACE()*/,
 			create: function create(root, /*optional*/_options, _shared) {
 				"use strict";
 
@@ -57,7 +43,21 @@
 
 				var __Internal__ = {
 					current: null,
-					cache: {},
+					cache: types.nullObject(),
+					defaultCountries: types.nullObject({
+						// TODO: Complete
+						en: 'us',
+						es: 'es',
+						fr: 'fr',
+						it: 'it',
+					}),
+					momentNamesFix: types.nullObject({
+						// TODO: Complete
+						'en-us': 'en',
+						'es-es': 'es',
+						'fr-fr': 'fr',
+						'it-it': 'it',
+					}),
 				};
 
 				//types.complete(_shared.Natives, {
@@ -104,39 +104,72 @@
 				
 				__Internal__.parseLocale = function parseLocale(data) {
 					data = JSON.parse(data);
+					const LC_MOMENT = types.get(data, 'LC_MOMENT');
+					if (LC_MOMENT) {
+						data.LC_MOMENT = null; // in case of failure
+							//const loadData = new global.Function('exports', 'module', 'require', 'define', LC_MOMENT);
+							//const requireMoment = function(path) {
+							//	return require('moment');
+							//};
+							//loadData.call(global, {}, module, requireMoment, undefined, LC_MOMENT);
+						const moment = {
+							defineLocale: function(name, data) {
+								data.name = name;
+								return data;
+							},
+						};
+						const define = function(whatever, factory) {
+							data.LC_MOMENT = factory(moment);
+						};
+						define.amd = true;
+						const getData = new global.Function('exports', 'module', 'require', 'define', LC_MOMENT);
+						getData.call(global, undefined, undefined, undefined, define);
+					};
 					return data;
 				};
 				
 				
-				locale.loadLocale = function loadLocale(name) {
-					if (types.has(__Internal__.cache, name)) {
-						var Promise = types.getPromise();
-						return Promise.resolve(__Internal__.cache[name]);
-					} else {
-						var loader = __Internal__.resourcesLoader;
-						return loader.locate(name + '.json')
-							.then(function(path) {
-								return loader.load(path);
-							})
-							.then(__Internal__.parseLocale)
-							.then(function(loc) {
-								__Internal__.cache[name] = loc;
-								return loc;
-							})
-							['catch'](function(ex) {
-								tools.log(tools.LogLevels.Warning, "Failed to load locale '~0~': '~1~'.", [name, ex]);
-								throw ex;
-							});
-					};
+				locale.has = function has(name) {
+					name = locale.momentToDoodadName(name);
+					return (name in __Internal__.cache);
+				};
+				
+				locale.get = function has(name) {
+					name = locale.momentToDoodadName(name);
+					return (__Internal__.cache[name] || null);
+				};
+				
+				locale.load = function load(name) {
+					var Promise = types.getPromise();
+					return Promise['try'](function tryLoadLocale() {
+						name = locale.momentToDoodadName(name);
+						if (locale.has(name)) {
+							return locale.get(name);
+						} else {
+							var loader = __Internal__.resourcesLoader;
+							return loader.locate(name + '.json')
+								.then(function(path) {
+									return loader.load(path);
+								})
+								.then(__Internal__.parseLocale)
+								.then(function(loc) {
+									__Internal__.cache[name] = loc;
+									return loc;
+								})
+								['catch'](function(ex) {
+									tools.log(tools.LogLevels.Warning, "Failed to load locale '~0~': '~1~'.", [name, ex]);
+									throw ex;
+								});
+						};
+					});
 				};
 
-				locale.setLocale = function setLocale(/*optional*/name) {
+				locale.setCurrent = function setLocale(/*optional*/name) {
 					if (!name) {
 						name = tools.getDefaultLanguage();
 					};
-					return locale.loadLocale(name).then(function(loc) {
+					return locale.load(name).then(function(loc) {
 						__Internal__.current = loc;
-						return loc;
 					});
 				};
 
@@ -144,43 +177,57 @@
 					return __Internal__.current;
 				};
 
+				__Internal__.fixMomentName = function fixMomentName(name) {
+					if (name in __Internal__.momentNamesFix) {
+						name = __Internal__.momentNamesFix[name];
+					};
+					return name;
+				};
 
+				locale.doodadToMomentName = function(name, /*optional*/noCountry) {
+					if (tools.indexOf(name, '_') < 0) {
+						// Already "moment" name
+						return name;
+					};
+					return __Internal__.fixMomentName(tools.split(name.split('@', 1)[0], '_', (noCountry ? 1 : 2)).join('-').toLowerCase());
+				};
 				
+				__Internal__.appendDefaultCountry = function appendDefaultCountry(name) {
+					if (name in __Internal__.defaultCountries) {
+						name += '-' + __Internal__.defaultCountries[name];
+					};
+					return name;
+				};
+
+				locale.momentToDoodadName = function(name) {
+					if (tools.indexOf(name, '_') >= 0) {
+						// Already Doodad name
+						return name;
+					};
+					name = __Internal__.appendDefaultCountry(name);
+					name = tools.split(name, '-', 2);
+					const ctry = name[1];
+					if (ctry) {
+						name[1] = ctry.toUpperCase();
+					};
+					return name.join('_');
+				};
+
 				return function init(/*optional*/options) {
 					var name = tools.getDefaultLanguage();
-					return locale.setLocale(name)
+					return locale.setCurrent(name)
 						['catch'](function(ex) {
 							if (name === 'en_US') {
 								tools.log(tools.LogLevels.Warning, "Failed to load system locale '~0~'.", [name]);
 							} else {
 								tools.log(tools.LogLevels.Warning, "Failed to load system locale '~0~'. Will try loading 'en_US'.", [name]);
-								return locale.setLocale('en_US');
+								return locale.setCurrent('en_US');
 							};
 						});
 				};
 			},
 		};
-		
 		return DD_MODULES;
-	};
-	
-	//! BEGIN_REMOVE()
-	if ((typeof process !== 'object') || (typeof module !== 'object')) {
-	//! END_REMOVE()
-		//! IF_UNDEF("serverSide")
-			// <PRB> export/import are not yet supported in browsers
-			global.DD_MODULES = exports.add(global.DD_MODULES);
-		//! END_IF()
-	//! BEGIN_REMOVE()
-	};
-	//! END_REMOVE()
-}).call(
-	//! BEGIN_REMOVE()
-	(typeof window !== 'undefined') ? window : ((typeof global !== 'undefined') ? global : this)
-	//! END_REMOVE()
-	//! IF_DEF("serverSide")
-	//! 	INJECT("global")
-	//! ELSE()
-	//! 	INJECT("window")
-	//! END_IF()
-);
+	},
+};
+//! END_MODULE()

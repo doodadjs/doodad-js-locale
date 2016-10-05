@@ -1,8 +1,9 @@
+//! BEGIN_MODULE()
+
 //! REPLACE_BY("// Copyright 2016 Claude Petit, licensed under Apache License version 2.0\n", true)
-// dOOdad - Object-oriented programming framework
+// doodad-js - Object-oriented programming framework
 // File: Tools_Locale_Make.js - Make extension
-// Project home: https://sourceforge.net/projects/doodad-js/
-// Trunk: svn checkout svn://svn.code.sf.net/p/doodad-js/code/trunk doodad-js-code
+// Project home: https://github.com/doodadjs/
 // Author: Claude Petit, Quebec city
 // Contact: doodadjs [at] gmail.com
 // Note: I'm still in alpha-beta stage, so expect to find some bugs or incomplete parts !
@@ -23,28 +24,16 @@
 //	limitations under the License.
 //! END_REPLACE()
 
-(function() {
-	const global = this;
-	
-	const exports = {};
-	
-	//! BEGIN_REMOVE()
-	if ((typeof process === 'object') && (typeof module === 'object')) {
-	//! END_REMOVE()
-		//! IF_DEF("serverSide")
-			module.exports = exports;
-		//! END_IF()
-	//! BEGIN_REMOVE()
-	};
-	//! END_REMOVE()
-	
-	exports.add = function add(DD_MODULES) {
+module.exports = {
+	add: function add(DD_MODULES) {
 		DD_MODULES = (DD_MODULES || {});
 		DD_MODULES['Doodad.Tools.Locale.Make'] = {
-			version: '0.1.0a',
+			version: /*! REPLACE_BY(TO_SOURCE(VERSION(MANIFEST("name")))) */ null /*! END_REPLACE()*/,
 			dependencies: [
 				'doodad-js-unicode',
 				'doodad-js-make',
+				'doodad-js-minifiers',
+				'doodad-js-locale',
 			],
 			
 			create: function create(root, /*optional*/_options, _shared) {
@@ -57,11 +46,14 @@
 				const doodad = root.Doodad,
 					types = doodad.Types,
 					tools = doodad.Tools,
+					nodejs = doodad.NodeJs,
 					files = tools.Files,
 					unicode = tools.Unicode,
 					make = root.Make,
 					locale = tools.Locale,
 					localeMake = locale.Make,
+					io = doodad.IO,
+					minifiers = io.Minifiers,
 					
 					nodeFs = require('fs');
 					
@@ -152,7 +144,7 @@
 						result = __Internal__.unicodeRegEx.exec(str);
 					};
 					retval.regExpStr = regexp;
-//console.log(regexp);
+		//console.log(regexp);
 					return retval;
 				};
 
@@ -318,7 +310,7 @@
 														// variableName = words.shift();
 													// };
 													// section.maps[variableName] = words.map(function(value) {
-														// const parts = value.slice(1, -1).split(',', 2);
+														// const parts = tools.split(value.slice(1, -1), ',', 2);
 														// const result = {};
 														// result[__Internal__.parseLocaleFileString(parts[0])] = __Internal__.parseLocaleFileString(parts[1]);
 														// return result;
@@ -385,6 +377,31 @@
 					});
 				};
 				
+				__Internal__.parseMomentLocaleFile = function parseMomentLocaleFiles(loc, name) {
+					const Promise = types.getPromise();
+					return Promise.try(function() {
+							const path = require.resolve('moment/locale/' + locale.doodadToMomentName(name));
+							return files.readFile(path, {async: true, encoding: 'utf-8'});
+						})
+						.then(function(code) {
+							const minifier = new minifiers.Javascript({autoFlush: false, encoding: 'utf-8'});
+							minifier.write(code);
+							minifier.write(io.EOF);
+							loc.LC_MOMENT = minifier.read().valueOf();
+						})
+						.catch(function(err) {
+							if ((err.code === 'MODULE_NOT_FOUND') || (err.code === 'ENOENT')) {
+								if (name.length > 1) {
+									return __Internal__.parseMomentLocaleFile(loc, locale.doodadToMomentName(name, true));
+								};
+							} else {
+								throw err;
+							};
+						})
+						.then(function(code) {
+							return loc;
+						});
+				};
 
 				__Internal__.loadLocale = function loadLocaleInternal(rootPath, name, /*optional*/category, /*optional*/sections, /*optional*/translit) {
 		//console.log(name);
@@ -393,8 +410,7 @@
 					const path = rootPath.combine(name);
 					return files.readFile(path, {async: true})
 						.then(function(data) {
-							const loc = __Internal__.parseLocaleFile(rootPath, data, category, sections, translit);
-							return loc;
+							return __Internal__.parseLocaleFile(rootPath, data, category, sections, translit);
 						});
 				};
 				
@@ -419,6 +435,9 @@
 								const name = items[index];
 								console.log("    " + name + " (" + (index + 1) + " of " + items.length + ")");
 								return __Internal__.loadLocale(source, name)
+									.then(function(loc) {
+										return __Internal__.parseMomentLocaleFile(loc, name);
+									})
 									.then(function(loc) {
 										return Promise.create(function nodeFsWriteFilePromise(resolve, reject) {
 											nodeFs.writeFile(dest.combine(name + '.json').toString(), JSON.stringify(loc), {encoding: 'utf-8'}, function(err) {
@@ -454,27 +473,7 @@
 				//};
 			},
 		};
-		
 		return DD_MODULES;
-	};
-	
-	//! BEGIN_REMOVE()
-	if ((typeof process !== 'object') || (typeof module !== 'object')) {
-	//! END_REMOVE()
-		//! IF_UNDEF("serverSide")
-			// <PRB> export/import are not yet supported in browsers
-			global.DD_MODULES = exports.add(global.DD_MODULES);
-		//! END_IF()
-	//! BEGIN_REMOVE()
-	};
-	//! END_REMOVE()
-}).call(
-	//! BEGIN_REMOVE()
-	(typeof window !== 'undefined') ? window : ((typeof global !== 'undefined') ? global : this)
-	//! END_REMOVE()
-	//! IF_DEF("serverSide")
-	//! 	INJECT("global")
-	//! ELSE()
-	//! 	INJECT("window")
-	//! END_IF()
-);
+	},
+};
+//! END_MODULE()

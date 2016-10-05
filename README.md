@@ -27,7 +27,7 @@ $ npm install doodad-js-locale
 
     function startup() {
         const locale = root.Doodad.Tools.Locale;
-        return locale.loadLocale('fr_FR').then(function(loc) {
+        return locale.load('fr_FR').then(function(loc) {
             console.log(loc);
         });
     };

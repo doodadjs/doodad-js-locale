@@ -1,6 +1,6 @@
 {
   "name": "doodad-js-locale",
-  "version": "2.4.0",
+  "version": "3.0.0",
   "stage": "r",
   "description": "GNU-C locales data provider.",
   "config": {
@@ -23,7 +23,16 @@
   "scripts": {
 	"locales": "node -r \"doodad-js-make/make.js\" . custom=locales"
   },
-  "dependencies": {
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/doodadjs/doodad-js-locale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/doodadjs/doodad-js-locale/issues",
+    "email": "doodadjs@gmail.com"
+  },
+  "devDependencies": {
+    "moment": "^2.15.1"
   },
   "tonicExampleFilename": "tonic.js"
 }
