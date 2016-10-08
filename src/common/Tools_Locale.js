@@ -189,7 +189,7 @@ module.exports = {
 						// Already "moment" name
 						return name;
 					};
-					return __Internal__.fixMomentName(tools.split(name.split('@', 1)[0], '_', (noCountry ? 1 : 2)).join('-').toLowerCase());
+					return __Internal__.fixMomentName(name.split('@', 1)[0].split('_', (noCountry ? 1 : 2)).join('-').toLowerCase());
 				};
 				
 				__Internal__.appendDefaultCountry = function appendDefaultCountry(name) {

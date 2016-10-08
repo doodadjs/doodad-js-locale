@@ -391,8 +391,9 @@ module.exports = {
 						})
 						.catch(function(err) {
 							if ((err.code === 'MODULE_NOT_FOUND') || (err.code === 'ENOENT')) {
-								if (name.length > 1) {
-									return __Internal__.parseMomentLocaleFile(loc, locale.doodadToMomentName(name, true));
+								var newName = locale.doodadToMomentName(name, true);
+								if (newName !== name) {
+									return __Internal__.parseMomentLocaleFile(loc, newName);
 								};
 							} else {
 								throw err;
@@ -408,7 +409,7 @@ module.exports = {
 					const Promise = types.getPromise();
 					rootPath = _shared.pathParser(rootPath);
 					const path = rootPath.combine(name);
-					return files.readFile(path, {async: true})
+					return files.readFile(path, {async: true, encoding: 'utf-8'})
 						.then(function(data) {
 							return __Internal__.parseLocaleFile(rootPath, data, category, sections, translit);
 						});
