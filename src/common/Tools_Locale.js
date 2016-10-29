@@ -165,12 +165,20 @@ module.exports = {
 				};
 
 				locale.setCurrent = function setLocale(/*optional*/name) {
+					var Promise = types.getPromise();
 					if (!name) {
 						name = tools.getDefaultLanguage();
 					};
-					return locale.load(name).then(function(loc) {
+					if (locale.has(name)) {
+						var loc = locale.get(name);
 						__Internal__.current = loc;
-					});
+						return Promise.resolve(loc);
+					} else {
+						return locale.load(name)
+							.then(function(loc) {
+								__Internal__.current = loc;
+							});
+					};
 				};
 
 				locale.getCurrent = function getCurrent() {
