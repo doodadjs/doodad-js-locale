@@ -23,15 +23,12 @@ $ npm install doodad-js-locale
     require('doodad-js-unicode').add(modules);
     require('doodad-js-locale').add(modules);
 
-    require('doodad-js').createRoot(modules);
-		.then(root => {
+    require('doodad-js').createRoot(modules).then(root => {
 			const locale = root.Doodad.Tools.Locale;
 			return locale.load('fr_FR');
-		})
-		.then(loc => {
+		}).then(loc => {
 			console.log(loc);
-		});
-        .catch(err => {
+		}).catch(err => {
             console.error(err);
         });
 ```
