@@ -384,7 +384,7 @@ module.exports = {
 							return files.readFile(path, {async: true, encoding: 'utf-8'});
 						})
 						.then(function(code) {
-							const minifier = new minifiers.Javascript({autoFlush: false, encoding: 'utf-8'});
+							const minifier = new minifiers.Javascript({flushMode: 'manual', encoding: 'utf-8'});
 							minifier.write(code);
 							minifier.write(io.EOF);
 							loc.LC_MOMENT = minifier.read().valueOf();
