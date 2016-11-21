@@ -71,9 +71,9 @@ module.exports = {
 
 				types.freezeObject(__options__);
 
-				locale.getOptions = function() {
+				locale.ADD('getOptions', function() {
 					return __options__;
-				};
+				});
 				
 
 				// TODO: Make a better and common resources locator and loader
@@ -98,9 +98,9 @@ module.exports = {
 				};
 
 
-				locale.setResourcesLoader = function setResourcesLoader(loader) {
+				locale.ADD('setResourcesLoader', function setResourcesLoader(loader) {
 					__Internal__.resourcesLoader = loader;
-				};
+				});
 				
 				__Internal__.parseLocale = function parseLocale(data) {
 					data = JSON.parse(data);
@@ -129,17 +129,17 @@ module.exports = {
 				};
 				
 				
-				locale.has = function has(name) {
+				locale.ADD('has', function has(name) {
 					name = locale.momentToDoodadName(name);
 					return (name in __Internal__.cache);
-				};
+				});
 				
-				locale.get = function has(name) {
+				locale.ADD('get', function has(name) {
 					name = locale.momentToDoodadName(name);
 					return (__Internal__.cache[name] || null);
-				};
+				});
 				
-				locale.load = function load(name) {
+				locale.ADD('load', function load(name) {
 					var Promise = types.getPromise();
 					return Promise['try'](function tryLoadLocale() {
 						name = locale.momentToDoodadName(name);
@@ -162,9 +162,9 @@ module.exports = {
 								});
 						};
 					});
-				};
+				});
 
-				locale.setCurrent = function setLocale(/*optional*/name) {
+				locale.ADD('setCurrent', function setLocale(/*optional*/name) {
 					var Promise = types.getPromise();
 					if (!name) {
 						name = tools.getDefaultLanguage();
@@ -179,11 +179,11 @@ module.exports = {
 								__Internal__.current = loc;
 							});
 					};
-				};
+				});
 
-				locale.getCurrent = function getCurrent() {
+				locale.ADD('getCurrent', function getCurrent() {
 					return __Internal__.current;
-				};
+				});
 
 				__Internal__.fixMomentName = function fixMomentName(name) {
 					if (name in __Internal__.momentNamesFix) {
@@ -192,13 +192,13 @@ module.exports = {
 					return name;
 				};
 
-				locale.doodadToMomentName = function(name, /*optional*/noCountry) {
+				locale.ADD('doodadToMomentName', function(name, /*optional*/noCountry) {
 					if (tools.indexOf(name, '_') < 0) {
 						// Already "moment" name
 						return name;
 					};
 					return __Internal__.fixMomentName(name.split('@', 1)[0].split('_', (noCountry ? 1 : 2)).join('-').toLowerCase());
-				};
+				});
 				
 				__Internal__.appendDefaultCountry = function appendDefaultCountry(name) {
 					if (name in __Internal__.defaultCountries) {
@@ -207,7 +207,7 @@ module.exports = {
 					return name;
 				};
 
-				locale.momentToDoodadName = function(name) {
+				locale.ADD('momentToDoodadName', function(name) {
 					if (tools.indexOf(name, '_') >= 0) {
 						// Already Doodad name
 						return name;
@@ -219,7 +219,7 @@ module.exports = {
 						name[1] = ctry.toUpperCase();
 					};
 					return name.join('_');
-				};
+				});
 
 				return function init(/*optional*/options) {
 					var name = tools.getDefaultLanguage();

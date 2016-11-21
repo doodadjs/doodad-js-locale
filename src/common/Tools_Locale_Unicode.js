@@ -62,7 +62,7 @@ module.exports = {
 				//};
 				
 				
-				unicode.isClass = function isClass(className, chr, /*optional*/localeData) {
+				unicode.ADD('isClass', function isClass(className, chr, /*optional*/localeData) {
 					if (!localeData) {
 						localeData = locale.getCurrent();
 					};
@@ -78,55 +78,55 @@ module.exports = {
 						cls.regExp = new _shared.Natives.windowRegExp("^(" + cls.regExpStr + ")+$");
 					};
 					return cls.regExp.test(chr);
-				};
+				});
 
-				unicode.isLower = function isLower(chr, /*optional*/localeData) {
+				unicode.ADD('isLower', function isLower(chr, /*optional*/localeData) {
 					return unicode.isClass('lower', chr, localeData);
-				};
+				});
 				
-				unicode.isUpper = function isUpper(chr, /*optional*/localeData) {
+				unicode.ADD('isUpper', function isUpper(chr, /*optional*/localeData) {
 					return unicode.isClass('upper', chr, localeData);
-				};
+				});
 				
-				unicode.isAlpha = function isAlpha(chr, /*optional*/localeData) {
+				unicode.ADD('isAlpha', function isAlpha(chr, /*optional*/localeData) {
 					return unicode.isClass('alpha', chr, localeData);
-				};
+				});
 				
-				unicode.isDigit = function isDigit(chr, /*optional*/localeData) {
+				unicode.ADD('isDigit', function isDigit(chr, /*optional*/localeData) {
 					return unicode.isClass('digit', chr, localeData);
-				};
+				});
 				
-				unicode.isAlnum = function isAlnum(chr, /*optional*/localeData) {
+				unicode.ADD('isAlnum', function isAlnum(chr, /*optional*/localeData) {
 					return unicode.isClass('alnum', chr, localeData);
-				};
+				});
 				
-				unicode.isHexDigit = function isHexDigit(chr, /*optional*/localeData) {
+				unicode.ADD('isHexDigit', function isHexDigit(chr, /*optional*/localeData) {
 					return unicode.isClass('xdigit', chr, localeData);
-				};
+				});
 				
-				unicode.isPunct = function isPunct(chr, /*optional*/localeData) {
+				unicode.ADD('isPunct', function isPunct(chr, /*optional*/localeData) {
 					return unicode.isClass('punct', chr, localeData);
-				};
+				});
 				
-				unicode.isSpace = function isSpace(chr, /*optional*/localeData) {
+				unicode.ADD('isSpace', function isSpace(chr, /*optional*/localeData) {
 					return unicode.isClass('space', chr, localeData);
-				};
+				});
 				
-				unicode.isBlank = function isBlank(chr, /*optional*/localeData) {
+				unicode.ADD('isBlank', function isBlank(chr, /*optional*/localeData) {
 					return unicode.isClass('blank', chr, localeData);
-				};
+				});
 				
-				unicode.isGraph = function isGraph(chr, /*optional*/localeData) {
+				unicode.ADD('isGraph', function isGraph(chr, /*optional*/localeData) {
 					return unicode.isClass('graph', chr, localeData);
-				};
+				});
 				
-				unicode.isPrint = function isPrint(chr, /*optional*/localeData) {
+				unicode.ADD('isPrint', function isPrint(chr, /*optional*/localeData) {
 					return unicode.isClass('print', chr, localeData);
-				};
+				});
 				
-				unicode.isCntrl = function isCntrl(chr, /*optional*/localeData) {
+				unicode.ADD('isCntrl', function isCntrl(chr, /*optional*/localeData) {
 					return unicode.isClass('cntrl', chr, localeData);
-				};
+				});
 				
 
 				//===================================
