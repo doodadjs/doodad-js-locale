@@ -102,30 +102,8 @@ module.exports = {
 					__Internal__.resourcesLoader = loader;
 				});
 				
-				__Internal__.parseLocale = function parseLocale(data) {
-					data = JSON.parse(data);
-					const LC_MOMENT = types.get(data, 'LC_MOMENT');
-					if (LC_MOMENT) {
-						data.LC_MOMENT = null; // in case of failure
-							//const loadData = new global.Function('exports', 'module', 'require', 'define', LC_MOMENT);
-							//const requireMoment = function(path) {
-							//	return require('moment');
-							//};
-							//loadData.call(global, {}, module, requireMoment, undefined, LC_MOMENT);
-						const moment = {
-							defineLocale: function(name, data) {
-								data.name = name;
-								return data;
-							},
-						};
-						const define = function(whatever, factory) {
-							data.LC_MOMENT = factory(moment);
-						};
-						define.amd = true;
-						const getData = new global.Function('exports', 'module', 'require', 'define', LC_MOMENT);
-						getData.call(global, undefined, undefined, undefined, define);
-					};
-					return data;
+				_shared.parseLocale = function parseLocale(data) {
+					return JSON.parse(data);
 				};
 				
 				
@@ -151,7 +129,7 @@ module.exports = {
 								.then(function(path) {
 									return loader.load(path);
 								})
-								.then(__Internal__.parseLocale)
+								.then(_shared.parseLocale)
 								.then(function(loc) {
 									__Internal__.cache[name] = loc;
 									return loc;
