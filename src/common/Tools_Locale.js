@@ -50,6 +50,7 @@ module.exports = {
 						es: 'es',
 						fr: 'fr',
 						it: 'it',
+						ru: 'ru',
 					}),
 					momentNamesFix: types.nullObject({
 						// TODO: Complete
@@ -57,6 +58,7 @@ module.exports = {
 						'es-es': 'es',
 						'fr-fr': 'fr',
 						'it-it': 'it',
+						'ru-ru': 'ru',
 					}),
 				};
 
@@ -102,7 +104,7 @@ module.exports = {
 					__Internal__.resourcesLoader = loader;
 				});
 				
-				_shared.parseLocale = function parseLocale(data) {
+				__Internal__.parseLocale = function parseLocale(data) {
 					return JSON.parse(data);
 				};
 				
@@ -129,8 +131,9 @@ module.exports = {
 								.then(function(path) {
 									return loader.load(path);
 								})
-								.then(_shared.parseLocale)
+								.then(__Internal__.parseLocale)
 								.then(function(loc) {
+									loc.NAME = name;
 									__Internal__.cache[name] = loc;
 									return loc;
 								})
