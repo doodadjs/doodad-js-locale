@@ -40,7 +40,7 @@ module.exports = {
 				// Get namespaces
 				//===================================
 					
-				var doodad = root.Doodad,
+				const doodad = root.Doodad,
 					types = doodad.Types,
 					tools = doodad.Tools,
 					locale = tools.Locale,
@@ -58,7 +58,7 @@ module.exports = {
 				// Internal
 				//===================================
 					
-				//var __Internal__ = {
+				//const __Internal__ = {
 				//};
 				
 				
@@ -66,7 +66,7 @@ module.exports = {
 					if (!localeData) {
 						localeData = locale.getCurrent();
 					};
-					var cls = localeData.LC_CTYPE.classes[className];
+					const cls = localeData.LC_CTYPE.classes[className];
 					if (!cls && (className === 'alnum')) {
 						// NOTE: "alnum" is not in the database.
 						return unicode.isClass('digit', chr, localeData) || unicode.isClass('alpha', chr, localeData);

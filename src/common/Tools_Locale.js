@@ -32,7 +32,7 @@ module.exports = {
 			create: function create(root, /*optional*/_options, _shared) {
 				"use strict";
 
-				var doodad = root.Doodad,
+				const doodad = root.Doodad,
 					types = doodad.Types,
 					tools = doodad.Tools,
 					namespaces = doodad.Namespaces,
@@ -41,7 +41,7 @@ module.exports = {
 					unicode = tools.Unicode,
 					locale = tools.Locale;
 
-				var __Internal__ = {
+				const __Internal__ = {
 					current: null,
 					cache: types.nullObject(),
 					defaultCountries: types.nullObject({
@@ -65,7 +65,7 @@ module.exports = {
 				//types.complete(_shared.Natives, {
 				//});
 				
-				var __options__ = types.extend({
+				const __options__ = types.extend({
 					localesPath: './locales/', // Combined with package's root folder
 				}, _options);
 
@@ -83,18 +83,18 @@ module.exports = {
 					locate: function locate(fileName, /*optional*/options) {
 						return modules.locate('doodad-js-locale')
 							.then(function(location) {
-								var localesPath = _shared.pathParser(__options__.localesPath);
-								var filePath = _shared.pathParser(fileName);
+								const localesPath = _shared.pathParser(__options__.localesPath);
+								const filePath = _shared.pathParser(fileName);
 								return location.set({file: null})
 									.combine(localesPath)
 									.combine(filePath);
 							});
 					},
 					load: function load(path, /*optional*/options) {
-						var headers = {
+						const headers = {
 							Accept: 'application/json',
 						};
-						var file = files.readFile(path, { async: true, encoding: 'utf-8', enableCache: true, headers: headers });
+						const file = files.readFile(path, { async: true, encoding: 'utf-8', enableCache: true, headers: headers });
 						return file;
 					},
 				};
@@ -120,13 +120,13 @@ module.exports = {
 				});
 				
 				locale.ADD('load', function load(name) {
-					var Promise = types.getPromise();
-					return Promise['try'](function tryLoadLocale() {
+					const Promise = types.getPromise();
+					return Promise.try(function tryLoadLocale() {
 						name = locale.momentToDoodadName(name);
 						if (locale.has(name)) {
 							return locale.get(name);
 						} else {
-							var loader = __Internal__.resourcesLoader;
+							const loader = __Internal__.resourcesLoader;
 							return loader.locate(name + '.json')
 								.then(function(path) {
 									return loader.load(path);
@@ -137,7 +137,7 @@ module.exports = {
 									__Internal__.cache[name] = loc;
 									return loc;
 								})
-								['catch'](function(ex) {
+								.catch(function(ex) {
 									tools.log(tools.LogLevels.Warning, "Failed to load locale '~0~': '~1~'.", [name, ex]);
 									throw ex;
 								});
@@ -146,12 +146,12 @@ module.exports = {
 				});
 
 				locale.ADD('setCurrent', function setLocale(/*optional*/name) {
-					var Promise = types.getPromise();
+					const Promise = types.getPromise();
 					if (!name) {
 						name = tools.getDefaultLanguage();
 					};
 					if (locale.has(name)) {
-						var loc = locale.get(name);
+						const loc = locale.get(name);
 						__Internal__.current = loc;
 						return Promise.resolve(loc);
 					} else {
@@ -203,9 +203,9 @@ module.exports = {
 				});
 
 				return function init(/*optional*/options) {
-					var name = tools.getDefaultLanguage();
+					const name = tools.getDefaultLanguage();
 					return locale.setCurrent(name)
-						['catch'](function(ex) {
+						.catch(function(ex) {
 							if (name === 'en_US') {
 								tools.log(tools.LogLevels.Warning, "Failed to load system locale '~0~'.", [name]);
 							} else {
