@@ -387,7 +387,7 @@ module.exports = {
 							const minifier = new minifiers.Javascript({flushMode: 'manual', encoding: 'utf-8'});
 							minifier.write(code);
 							minifier.write(io.EOF);
-							loc.LC_MOMENT = minifier.read().valueOf();
+							loc.LC_MOMENT = minifier.read();
 						})
 						.catch(function(err) {
 							if ((err.code === 'MODULE_NOT_FOUND') || (err.code === 'ENOENT')) {
