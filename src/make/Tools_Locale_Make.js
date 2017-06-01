@@ -384,10 +384,18 @@ module.exports = {
 							return files.readFile(path, {async: true, encoding: 'utf-8'});
 						})
 						.then(function(code) {
-							const minifier = new minifiers.Javascript({flushMode: 'manual', encoding: 'utf-8'});
+							const minifier = new minifiers.Javascript({encoding: 'utf-8'});
+							loc.LC_MOMENT = '';
+							minifier.onData.attach(null, function(ev) {
+								ev.preventDefault();
+								if (ev.data.raw !== io.EOF) {
+									loc.LC_MOMENT += ev.data.toString();
+								};
+							});
+							const promise = minifier.onEOF.promise();
 							minifier.write(code);
 							minifier.write(io.EOF);
-							loc.LC_MOMENT = minifier.read();
+							return promise;
 						})
 						.catch(function(err) {
 							if ((err.code === 'MODULE_NOT_FOUND') || (err.code === 'ENOENT')) {
