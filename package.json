@@ -4,23 +4,23 @@
   "version": "0.0.0",
   "config": {
     "Doodad__Tools__Locale": {
-        "localesPath": "./locales/"
+      "localesPath": "./locales/"
     }
   },
   "main": "index.js",
   "files": [
-	"locales",
+    "locales",
     "README",
-	"tonic.js"
+    "tonic.js"
   ],
   "keywords": [
     "doodad-js",
     "locale",
     "unicode",
-	"gnu c"
+    "gnu c"
   ],
   "scripts": {
-	"locales": "node -r \"doodad-js-make/make.js\" . custom=locales"
+    "locales": "node -r \"doodad-js-make/make.js\" . custom=locales"
   },
   "repository": {
     "type": "git",
@@ -31,7 +31,7 @@
     "email": "doodadjs@gmail.com"
   },
   "devDependencies": {
-    "moment": "^2.15.1"
+    "moment": "^2.18.1"
   },
   "tonicExampleFilename": "tonic.js"
 }
