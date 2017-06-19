@@ -50,7 +50,7 @@ $ npm install doodad-js-locale
   - **doodad-js-terminal**: Terminal (alpha)
   - **doodad-js-test**: Test application
   - **doodad-js-widgets**: Widgets base module (alpha)
-  - **doodad-js-xml**: DOM XML parser (release)
+  - **doodad-js-xml**: XML Parser (beta)
   
 ## License
 
