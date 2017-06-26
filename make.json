@@ -58,13 +58,17 @@
 			"operations": [
 				{
 					"class": "Make.Modules.Load",
-					"modules": {
-						"doodad-js-unicode": { },
-						"doodad-js-locale": {
-							"src/make/Tools_Locale_Make.js": { }
+					"files": [
+						{
+							"module": "doodad-js-unicode"
+						},
+						{
+							"module": "doodad-js-locale",
+							"path": "src/make/Tools_Locale_Make.js"
 						}
-					}
+					]
 				},
+				
 				{
 					"class": "Make.Folder.Create",
 					"destination": "%PACKAGEDIR%/locales"
