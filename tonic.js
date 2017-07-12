@@ -1,17 +1,16 @@
-"use strict";
-
-const modules = {};
-require('doodad-js-unicode').add(modules);
-require('doodad-js-locale').add(modules);
-
-require('doodad-js').createRoot(modules)
+require('doodad-js').createRoot()
+	.then(root => {
+		return root.Doodad.Modules.load([
+			{
+				module: 'doodad-js-locale'
+			}
+		]);
+	})
 	.then(root => {
 		const locale = root.Doodad.Tools.Locale;
 		return locale.load('fr_FR');
-	})
-	.then(loc => {
+	}).then(loc => {
 		console.log(loc);
-	})
-	['catch'](function(err) {
+	}).catch(err => {
 		console.error(err);
 	});
