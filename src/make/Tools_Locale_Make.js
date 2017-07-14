@@ -415,7 +415,7 @@ module.exports = {
 				__Internal__.loadLocale = function loadLocaleInternal(rootPath, name, /*optional*/category, /*optional*/sections, /*optional*/translit) {
 		//console.log(name);
 					const Promise = types.getPromise();
-					rootPath = _shared.pathParser(rootPath);
+					rootPath = files.parsePath(rootPath);
 					const path = rootPath.combine(name);
 					return files.readFile(path, {async: true, encoding: 'utf-8'})
 						.then(function(data) {
