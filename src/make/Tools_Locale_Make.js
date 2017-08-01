@@ -30,10 +30,14 @@ module.exports = {
 		DD_MODULES['Doodad.Tools.Locale.Make'] = {
 			version: /*! REPLACE_BY(TO_SOURCE(VERSION(MANIFEST("name")))) */ null /*! END_REPLACE()*/,
 			dependencies: [
-				'doodad-js-unicode',
-				'doodad-js-make',
-				'doodad-js-minifiers',
-				'doodad-js-locale',
+				{
+					name: 'doodad-js-make',
+					type: 'Package',
+				},
+				{
+					name: 'doodad-js-locale',
+					type: 'Package',
+				},
 			],
 			
 			create: function create(root, /*optional*/_options, _shared) {
