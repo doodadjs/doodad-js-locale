@@ -32,11 +32,13 @@ module.exports = {
 			dependencies: [
 				{
 					name: 'doodad-js-make',
-					type: 'Package',
+					version: /*! REPLACE_BY(TO_SOURCE(VERSION('doodad-js-make'))) */ null /*! END_REPLACE() */,
+					type: /*! REPLACE_BY(TO_SOURCE(MAKE_MANIFEST("type", "doodad-js-make"))) */ 'Package' /*! END_REPLACE()*/,
 				},
 				{
 					name: 'doodad-js-locale',
-					type: 'Package',
+					version: /*! REPLACE_BY(TO_SOURCE(VERSION('doodad-js-locale'))) */ null /*! END_REPLACE() */,
+					type: /*! REPLACE_BY(TO_SOURCE(MAKE_MANIFEST("type", "doodad-js-locale"))) */ 'Package' /*! END_REPLACE()*/,
 				},
 			],
 			
