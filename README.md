@@ -65,6 +65,11 @@ $ npm install doodad-js-locale
 
   [Apache-2.0][license-url]
 
+  This package includes data from the GNU C Library, licensed under the "GNU Lesser General Public
+License".
+
+  This package also includes data from Moment.js, licensed under MIT.
+
 [npm-image]: https://img.shields.io/npm/v/doodad-js-locale.svg
 [npm-url]: https://npmjs.org/package/doodad-js-locale
 [license-url]: http://opensource.org/licenses/Apache-2.0
