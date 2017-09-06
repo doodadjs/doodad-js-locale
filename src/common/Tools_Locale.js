@@ -43,8 +43,8 @@ module.exports = {
 
 				const __Internal__ = {
 					current: null,
-					cache: types.nullObject(),
-					defaultCountries: types.nullObject({
+					cache: tools.nullObject(),
+					defaultCountries: tools.nullObject({
 						// TODO: Complete
 						en: 'us',
 						es: 'es',
@@ -52,7 +52,7 @@ module.exports = {
 						it: 'it',
 						ru: 'ru',
 					}),
-					momentNamesFix: types.nullObject({
+					momentNamesFix: tools.nullObject({
 						// TODO: Complete
 						'en-us': 'en',
 						'es-es': 'es',
@@ -62,10 +62,10 @@ module.exports = {
 					}),
 				};
 
-				//types.complete(_shared.Natives, {
+				//tools.complete(_shared.Natives, {
 				//});
 				
-				const __options__ = types.extend({
+				const __options__ = tools.extend({
 					localesPath: './locales/', // Combined with package's root folder
 				}, _options);
 

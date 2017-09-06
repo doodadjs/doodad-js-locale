@@ -67,7 +67,7 @@ module.exports = {
 				// Natives
 				//===================================
 					
-				types.complete(_shared.Natives, {
+				tools.complete(_shared.Natives, {
 					windowParseInt: global.parseInt,
 					windowRegExp: global.RegExp,
 				});
@@ -330,7 +330,7 @@ module.exports = {
 														if (!types.isArray(val)) {
 															section[variableName] = val = [val];
 														};
-														types.append(val, words);
+														tools.append(val, words);
 													} else {
 														section[variableName] = words;
 													};
