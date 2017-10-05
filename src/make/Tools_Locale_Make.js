@@ -24,6 +24,16 @@
 //	limitations under the License.
 //! END_REPLACE()
 
+
+//! IF_SET("mjs")
+	//! INJECT("import {default as nodeFs} from 'fs';")
+//! ELSE()
+	const nodeFs = require('fs');
+//! END_IF()
+
+const nodeFsWriteFile = nodeFs.writeFile;
+
+
 exports.add = function add(DD_MODULES) {
 	DD_MODULES = (DD_MODULES || {});
 	DD_MODULES['Doodad.Tools.Locale.Make'] = {
@@ -58,9 +68,7 @@ exports.add = function add(DD_MODULES) {
 				locale = tools.Locale,
 				localeMake = locale.Make,
 				io = doodad.IO,
-				minifiers = io.Minifiers,
-					
-				nodeFs = require('fs');
+				minifiers = io.Minifiers;
 					
 			//===================================
 			// Natives
@@ -454,7 +462,7 @@ exports.add = function add(DD_MODULES) {
 								})
 								.then(function(loc) {
 									return Promise.create(function nodeFsWriteFilePromise(resolve, reject) {
-										nodeFs.writeFile(dest.combine(name + '.json').toString(), JSON.stringify(loc), {encoding: 'utf-8'}, function(err) {
+										nodeFsWriteFile(dest.combine(name + '.json').toString(), JSON.stringify(loc), {encoding: 'utf-8'}, function(err) {
 											if (err) {
 												reject(err);
 											} else {
