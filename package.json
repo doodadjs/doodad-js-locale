@@ -1,5 +1,5 @@
 {
-  "name": "doodad-js-locale",
+  "name": "@doodad-js/locale",
   "description": "GNU-C locales data provider.",
   "version": "0.0.0",
   "config": {

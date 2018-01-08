@@ -80,7 +80,7 @@ exports.add = function add(DD_MODULES) {
 			// TODO: Make a better and common resources locator and loader
 			__Internal__.resourcesLoader = {
 				locate: function locate(fileName, /*optional*/options) {
-					return modules.locate('doodad-js-locale')
+					return modules.locate('@doodad-js/locale')
 						.then(function(location) {
 							const localesPath = files.parsePath(__options__.localesPath);
 							const filePath = files.parsePath(fileName);
