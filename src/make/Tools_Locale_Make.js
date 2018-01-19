@@ -61,7 +61,7 @@ exports.add = function add(DD_MODULES) {
 			const doodad = root.Doodad,
 				types = doodad.Types,
 				tools = doodad.Tools,
-				nodejs = doodad.NodeJs,
+				//nodejs = doodad.NodeJs,
 				files = tools.Files,
 				unicode = tools.Unicode,
 				make = root.Make,
@@ -149,9 +149,9 @@ exports.add = function add(DD_MODULES) {
 					};
 					if ((from < 0x10000) && (to < 0x10000)) {
 						if (from === to) {
-							regexp += "|\\u" + ("000" + from.toString(16)).slice(-4)
+							regexp += "|\\u" + ("000" + from.toString(16)).slice(-4);
 						} else {
-							regexp += "|[\\u" + ("000" + from.toString(16)).slice(-4) + "-\\u" + ("000" + to.toString(16)).slice(-4) + "]"
+							regexp += "|[\\u" + ("000" + from.toString(16)).slice(-4) + "-\\u" + ("000" + to.toString(16)).slice(-4) + "]";
 						};
 					};
 					result = __Internal__.unicodeRegEx.exec(str);
@@ -199,7 +199,8 @@ exports.add = function add(DD_MODULES) {
 					wordsSepRegEx = createRegEx();
 						
 					const waiting = [];
-						
+					
+					/* eslint no-cond-assign: "off" */
 					while (result = wordsSepRegEx.exec(data)) {
 						const str = data.slice(lastIndex, result.index);
 						chr = result[0];
@@ -333,7 +334,7 @@ exports.add = function add(DD_MODULES) {
 											if (words) {
 												words.push(word);
 												if (types.has(section, variableName)) {
-													const val = section[variableName];
+													let val = section[variableName];
 													if (!types.isArray(val)) {
 														section[variableName] = val = [val];
 													};
@@ -386,7 +387,7 @@ exports.add = function add(DD_MODULES) {
 						.then(function() {
 							resolve(sections);
 						})
-						['catch'](reject);
+						.catch(reject);
 				});
 			};
 				
@@ -412,13 +413,14 @@ exports.add = function add(DD_MODULES) {
 					})
 					.catch(function(err) {
 						if ((err.code === 'MODULE_NOT_FOUND') || (err.code === 'ENOENT')) {
-							var newName = locale.doodadToMomentName(name, true);
+							const newName = locale.doodadToMomentName(name, true);
 							if (newName !== name) {
 								return __Internal__.parseMomentLocaleFile(loc, newName);
 							};
 						} else {
 							throw err;
 						};
+						return undefined;
 					})
 					.then(function(code) {
 						return loc;
@@ -427,7 +429,7 @@ exports.add = function add(DD_MODULES) {
 
 			__Internal__.loadLocale = function loadLocaleInternal(rootPath, name, /*optional*/category, /*optional*/sections, /*optional*/translit) {
 	//console.log(name);
-				const Promise = types.getPromise();
+				//const Promise = types.getPromise();
 				rootPath = files.parsePath(rootPath);
 				const path = rootPath.combine(name);
 				return files.readFile(path, {async: true, encoding: 'utf-8'})
@@ -481,7 +483,9 @@ exports.add = function add(DD_MODULES) {
 					};
 					return files.readFile(source.combine('list.txt'), {async: true, encoding: 'utf-8'})
 						.then(function(list) {
-							const items = list.replace(/(\r\n)|(\n\r)|\n|\r/g, '\n').split('\n').filter(function(name) {return !!name});
+							const items = list.replace(/(\r\n)|(\n\r)|\n|\r/g, '\n').split('\n').filter(function(name) {
+								return !!name;
+							});
 							return proceedItems(items, 0);
 						});
 				}),

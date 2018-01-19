@@ -34,10 +34,10 @@ exports.add = function add(DD_MODULES) {
 			const doodad = root.Doodad,
 				types = doodad.Types,
 				tools = doodad.Tools,
-				namespaces = doodad.Namespaces,
+				//namespaces = doodad.Namespaces,
 				modules = doodad.Modules,
 				files = tools.Files,
-				unicode = tools.Unicode,
+				//unicode = tools.Unicode,
 				locale = tools.Locale;
 
 			const __Internal__ = {
@@ -211,6 +211,7 @@ exports.add = function add(DD_MODULES) {
 							tools.log(tools.LogLevels.Warning, "Failed to load system locale '~0~'. Will try loading 'en_US'.", [name]);
 							return locale.setCurrent('en_US');
 						};
+						return undefined;
 					});
 			};
 		},
