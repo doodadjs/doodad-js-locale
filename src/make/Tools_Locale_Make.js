@@ -28,11 +28,12 @@
 //! IF_SET("mjs")
 	//! INJECT("import {default as nodeFs} from 'fs';")
 //! ELSE()
+	"use strict";
+
 	const nodeFs = require('fs');
 //! END_IF()
 
 const nodeFsWriteFile = nodeFs.writeFile;
-
 
 exports.add = function add(DD_MODULES) {
 	DD_MODULES = (DD_MODULES || {});
@@ -52,8 +53,6 @@ exports.add = function add(DD_MODULES) {
 		],
 			
 		create: function create(root, /*optional*/_options, _shared) {
-			"use strict";
-
 			//===================================
 			// Get namespaces
 			//===================================
