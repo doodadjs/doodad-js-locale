@@ -24,6 +24,7 @@
 //	limitations under the License.
 //! END_REPLACE()
 
+/* eslint no-console: "off" */  // CLI !
 
 //! IF_SET("mjs")
 	//! INJECT("import {default as nodeFs} from 'fs';")
