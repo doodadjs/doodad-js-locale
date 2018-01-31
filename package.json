@@ -31,8 +31,7 @@
     "email": "doodadjs@gmail.com"
   },
   "devDependencies": {
-    "moment": "^2.18.1",
-    "@doodad-js/eslint-config-base": "^1.2.1"
+    "moment": "^2.18.1"
   },
   "tonicExampleFilename": "tonic.js"
 }
