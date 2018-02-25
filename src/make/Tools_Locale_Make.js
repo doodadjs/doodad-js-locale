@@ -157,7 +157,7 @@ exports.add = function add(DD_MODULES) {
 					result = __Internal__.unicodeRegEx.exec(str);
 				};
 				retval.regExpStr = regexp;
-	//console.log(regexp);
+
 				return retval;
 			};
 
@@ -428,7 +428,6 @@ exports.add = function add(DD_MODULES) {
 			};
 
 			__Internal__.loadLocale = function loadLocaleInternal(rootPath, name, /*optional*/category, /*optional*/sections, /*optional*/translit) {
-	//console.log(name);
 				//const Promise = types.getPromise();
 				rootPath = files.parsePath(rootPath);
 				const path = rootPath.combine(name);
@@ -453,11 +452,11 @@ exports.add = function add(DD_MODULES) {
 					if (types.isString(dest)) {
 						dest = this.taskData.parseVariables(dest, { isPath: true });
 					};
-					console.info('Compiling locales database (this may take a while)...');
+					tools.log(tools.LogLevels.Info, "Compiling locales database (this may take a while)...");
 					function proceedItems(items, index) {
 						if (index < items.length) {
 							const name = items[index];
-							console.log("    " + name + " (" + (index + 1) + " of " + items.length + ")");
+							tools.log(tools.LogLevels.Debug, "    ~0~ (~1~ of ~2~)", [name, index + 1, items.length]);
 							return __Internal__.loadLocale(source, name)
 								.then(function(loc) {
 									return __Internal__.parseMomentLocaleFile(loc, name);
