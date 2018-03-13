@@ -38,8 +38,9 @@ exports.add = function add(DD_MODULES) {
 				types = doodad.Types,
 				tools = doodad.Tools,
 				//namespaces = doodad.Namespaces,
+				resources = doodad.Resources,
 				modules = doodad.Modules,
-				files = tools.Files,
+				//files = tools.Files,
 				//unicode = tools.Unicode,
 				locale = tools.Locale;
 
@@ -67,50 +68,19 @@ exports.add = function add(DD_MODULES) {
 			//tools.complete(_shared.Natives, {
 			//});
 				
-			const __options__ = tools.extend({
-				localesPath: './locales/', // Combined with package's root folder
-			}, _options);
+			//const __options__ = tools.extend({
+			//	localesPath: './locales/', // Combined with package's root folder
+			//}, _options);
 
 			//__options__. = types.to....(__options__.);
 
-			types.freezeObject(__options__);
+			//types.freezeObject(__options__);
 
-			locale.ADD('getOptions', function() {
-				return __options__;
-			});
+			//locale.ADD('getOptions', function() {
+			//	return __options__;
+			//});
 				
 
-			// TODO: Make a better and common resources locator and loader
-			__Internal__.resourcesLoader = {
-				locate: function locate(fileName, /*optional*/options) {
-					return modules.locate('@doodad-js/locale')
-						.then(function(location) {
-							const localesPath = files.parsePath(__options__.localesPath);
-							const filePath = files.parsePath(fileName);
-							return location.set({file: null})
-								.combine(localesPath)
-								.combine(filePath);
-						});
-				},
-				load: function load(path, /*optional*/options) {
-					const headers = {
-						Accept: 'application/json',
-					};
-					const file = files.readFile(path, { async: true, encoding: 'utf-8', enableCache: true, headers: headers });
-					return file;
-				},
-			};
-
-
-			locale.ADD('setResourcesLoader', function setResourcesLoader(loader) {
-				__Internal__.resourcesLoader = loader;
-			});
-				
-			__Internal__.parseLocale = function parseLocale(data) {
-				return JSON.parse(data);
-			};
-				
-				
 			locale.ADD('has', function has(name) {
 				name = locale.momentToDoodadName(name);
 				return (name in __Internal__.cache);
@@ -128,12 +98,11 @@ exports.add = function add(DD_MODULES) {
 					if (locale.has(name)) {
 						return locale.get(name);
 					} else {
-						const loader = __Internal__.resourcesLoader;
-						return loader.locate(name + '.json')
+						const loader = locale.getResourcesLoader();
+						return loader.locate('./locales/' + name + '.json')
 							.then(function(path) {
 								return loader.load(path);
 							})
-							.then(__Internal__.parseLocale)
 							.then(function(loc) {
 								loc.NAME = name;
 								__Internal__.cache[name] = loc;
@@ -206,7 +175,12 @@ exports.add = function add(DD_MODULES) {
 
 			return function init(/*optional*/options) {
 				const name = tools.getDefaultLanguage();
-				return locale.setCurrent(name)
+				return modules.locate('@doodad-js/locale')
+					.then(function(path) {
+						const basePath = path.set({file: null});
+						resources.createResourcesLoader(locale, basePath);
+						return locale.setCurrent(name);
+					})
 					.catch(function(ex) {
 						if (name === 'en_US') {
 							tools.log(tools.LogLevels.Warning, "Failed to load system locale '~0~'.", [name]);
