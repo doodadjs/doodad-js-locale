@@ -47,10 +47,28 @@
 			"browserify": true
 		},
 		{
+			"src": "common/Tools_Locale_Resources.js",
+			"client": true,
+			"server": true,
+			"browserify": true
+		},
+		{
 			"src": "common/Tools_Locale_Unicode.js",
 			"client": true,
 			"server": true,
 			"browserify": true
+		}
+	],
+	"resources": [
+		{
+			"name": "Doodad.Tools.Locale/Resources",
+			"namespace": "Doodad.Tools.Locale",
+			"sourceBase": "%PACKAGEDIR%/",
+			"source": "./locales",
+			"client": true,
+			"server": true,
+			"browserify": true,
+			"filter": "^(en_.*[.]json|fr_.*[.]json)$"
 		}
 	],
 	"tasks": {
@@ -107,12 +125,6 @@
 		},
 		"install": {
 			"operations": [
-				{
-					"class": "Make.Folder.Copy",
-					"source": "%PACKAGEDIR%/locales",
-					"destination": "%INSTALLDIR%/%PACKAGENAME%/locales"
-				},
-
 				{
 					"class": "Make.Generate.Package"
 				}
