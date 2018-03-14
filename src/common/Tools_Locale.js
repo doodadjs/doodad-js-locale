@@ -33,16 +33,22 @@ exports.add = function add(DD_MODULES) {
 	DD_MODULES = (DD_MODULES || {});
 	DD_MODULES['Doodad.Tools.Locale'] = {
 		version: /*! REPLACE_BY(TO_SOURCE(VERSION(MANIFEST("name")))) */ null /*! END_REPLACE()*/,
+		dependencies: [
+			'Doodad.Tools.Locale.Resources',
+			{
+				name: 'Doodad.Tools.Locale.Resources/Locales',
+				optional: true,
+			},
+		],
 		create: function create(root, /*optional*/_options, _shared) {
 			const doodad = root.Doodad,
 				types = doodad.Types,
 				tools = doodad.Tools,
 				//namespaces = doodad.Namespaces,
-				resources = doodad.Resources,
-				modules = doodad.Modules,
 				//files = tools.Files,
 				//unicode = tools.Unicode,
-				locale = tools.Locale;
+                locale = tools.Locale,
+                localeResources = locale.Resources;
 
 			const __Internal__ = {
 				current: null,
@@ -65,21 +71,6 @@ exports.add = function add(DD_MODULES) {
 				}),
 			};
 
-			//tools.complete(_shared.Natives, {
-			//});
-				
-			//const __options__ = tools.extend({
-			//	localesPath: './locales/', // Combined with package's root folder
-			//}, _options);
-
-			//__options__. = types.to....(__options__.);
-
-			//types.freezeObject(__options__);
-
-			//locale.ADD('getOptions', function() {
-			//	return __options__;
-			//});
-				
 
 			locale.ADD('has', function has(name) {
 				name = locale.momentToDoodadName(name);
@@ -98,11 +89,8 @@ exports.add = function add(DD_MODULES) {
 					if (locale.has(name)) {
 						return locale.get(name);
 					} else {
-						const loader = locale.getResourcesLoader();
-						return loader.locate('./locales/' + name + '.json')
-							.then(function(path) {
-								return loader.load(path);
-							})
+						const loader = localeResources.getResourcesLoader();
+						return loader.load('./locales/' + name + '.json')
 							.then(function(loc) {
 								loc.NAME = name;
 								__Internal__.cache[name] = loc;
@@ -175,12 +163,7 @@ exports.add = function add(DD_MODULES) {
 
 			return function init(/*optional*/options) {
 				const name = tools.getDefaultLanguage();
-				return modules.locate('@doodad-js/locale')
-					.then(function(path) {
-						const basePath = path.set({file: null});
-						resources.createResourcesLoader(locale, basePath);
-						return locale.setCurrent(name);
-					})
+				return locale.setCurrent(name)
 					.catch(function(ex) {
 						if (name === 'en_US') {
 							tools.log(tools.LogLevels.Warning, "Failed to load system locale '~0~'.", [name]);
