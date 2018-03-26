@@ -36,9 +36,9 @@
 
 const nodeFsWriteFile = nodeFs.writeFile;
 
-exports.add = function add(DD_MODULES) {
-	DD_MODULES = (DD_MODULES || {});
-	DD_MODULES['Doodad.Tools.Locale.Make'] = {
+exports.add = function add(modules) {
+	modules = (modules || {});
+	modules['Doodad.Tools.Locale.Make'] = {
 		version: /*! REPLACE_BY(TO_SOURCE(VERSION(MANIFEST("name")))) */ null /*! END_REPLACE()*/,
 		dependencies: [
 			{
@@ -498,7 +498,7 @@ exports.add = function add(DD_MODULES) {
 			//};
 		},
 	};
-	return DD_MODULES;
+	return modules;
 };
 
 //! END_MODULE()
