@@ -39,22 +39,23 @@ exports.add = function add(modules) {
 			// Get namespaces
 			//===================================
 					
-            const doodad = root.Doodad,
-                modules = doodad.Modules,
-                resources = doodad.Resources,
-				//types = doodad.Types,
-                tools = doodad.Tools,
-                locale = tools.Locale,
-                localeResources = locale.Resources;
+			const doodad = root.Doodad,
+				modules = doodad.Modules,
+				resources = doodad.Resources,
+				types = doodad.Types,
+				tools = doodad.Tools,
+				files = tools.Files,
+				locale = tools.Locale,
+				localeResources = locale.Resources;
 
-            return function init(options) {
-                return modules.locate('@doodad-js/locale')
-                    .then(function(path) {
-                        const rootOpts = root.getOptions();
-                        const basePath = path.set({file: null});
-                        resources.createResourcesLoader(localeResources, (rootOpts.fromSource ? basePath : (root.serverSide ? basePath.combine('./build') : basePath)));
-                    });
-            };
+			return function init(options) {
+				const Promise = types.getPromise();
+				return Promise.resolve(root.serverSide ? files.Path.parse(module.filename) : modules.locate(/*! INJECT(TO_SOURCE(MANIFEST('name'))) */))
+					.then(function(location) {
+						location = location.set({file: ''});
+						resources.createResourcesLoader(localeResources, (root.serverSide ? location.moveUp(2) : location));
+					});
+			};
 		},
 	};
 	return modules;
