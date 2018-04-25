@@ -52,12 +52,12 @@ exports.add = function add(modules) {
 				type: /*! REPLACE_BY(TO_SOURCE(MAKE_MANIFEST("type", "@doodad-js/locale"))) */ 'Package' /*! END_REPLACE()*/,
 			},
 		],
-			
+
 		create: function create(root, /*optional*/_options, _shared) {
 			//===================================
 			// Get namespaces
 			//===================================
-					
+
 			const doodad = root.Doodad,
 				types = doodad.Types,
 				tools = doodad.Tools,
@@ -69,25 +69,25 @@ exports.add = function add(modules) {
 				localeMake = locale.Make,
 				io = doodad.IO,
 				minifiers = io.Minifiers;
-					
+
 			//===================================
 			// Natives
 			//===================================
-					
+
 			tools.complete(_shared.Natives, {
 				windowParseInt: global.parseInt,
 				windowRegExp: global.RegExp,
 			});
-					
+
 			//===================================
 			// Internal
 			//===================================
-					
+
 			const __Internal__ = {
 				unicodeRegEx: /<U([0-9A-Fa-f]{4,8})>([.][.]<U([0-9A-Fa-f]{4,8})>)?/g,
 			};
-				
-				
+
+
 			__Internal__.parseLocaleFileString = function parseLocaleFileString(str) {
 				return str.replace(__Internal__.unicodeRegEx, function (m, p1, p2, p3, o, s) {
 					const from = _shared.Natives.windowParseInt(p1, 16),
@@ -183,9 +183,9 @@ exports.add = function add(modules) {
 					if (!sections) {
 						sections = {};
 					};
-						
+
 					translit = translit || 0;
-							
+
 					function createRegEx() {
 						let lastIndex = 0;
 						if (wordsSepRegEx) {
@@ -195,11 +195,11 @@ exports.add = function add(modules) {
 						newRegExp.lastIndex = lastIndex;
 						return newRegExp;
 					};
-						
+
 					wordsSepRegEx = createRegEx();
-						
+
 					const waiting = [];
-					
+
 					/* eslint no-cond-assign: "off" */
 					while (result = wordsSepRegEx.exec(data)) {
 						const str = data.slice(lastIndex, result.index);
@@ -382,7 +382,7 @@ exports.add = function add(modules) {
 
 						lastIndex = wordsSepRegEx.lastIndex;
 					};
-						
+
 					Promise.all(waiting)
 						.then(function() {
 							resolve(sections);
@@ -390,7 +390,7 @@ exports.add = function add(modules) {
 						.catch(reject);
 				});
 			};
-				
+
 			__Internal__.parseMomentLocaleFile = function parseMomentLocaleFiles(loc, name) {
 				const Promise = types.getPromise();
 				return Promise.try(function() {
@@ -436,8 +436,8 @@ exports.add = function add(modules) {
 						return __Internal__.parseLocaleFile(rootPath, data, category, sections, translit);
 					});
 			};
-				
-				
+
+
 			localeMake.REGISTER(make.Operation.$extend(
 			{
 				$TYPE_NAME: 'Database',
@@ -489,7 +489,7 @@ exports.add = function add(modules) {
 						});
 				}),
 			}));
-				
+
 
 			//===================================
 			// Init

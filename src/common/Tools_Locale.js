@@ -76,12 +76,12 @@ exports.add = function add(modules) {
 				name = locale.momentToDoodadName(name);
 				return (name in __Internal__.cache);
 			});
-				
+
 			locale.ADD('get', function has(name) {
 				name = locale.momentToDoodadName(name);
 				return (__Internal__.cache[name] || null);
 			});
-				
+
 			locale.ADD('load', function load(name) {
 				const Promise = types.getPromise();
 				return Promise.try(function tryLoadLocale() {
@@ -139,7 +139,7 @@ exports.add = function add(modules) {
 				};
 				return __Internal__.fixMomentName(name.split('@', 1)[0].split('_', (noCountry ? 1 : 2)).join('-').toLowerCase());
 			});
-				
+
 			__Internal__.appendDefaultCountry = function appendDefaultCountry(name) {
 				if (name in __Internal__.defaultCountries) {
 					name += '-' + __Internal__.defaultCountries[name];

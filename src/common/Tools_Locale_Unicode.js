@@ -36,34 +36,34 @@ exports.add = function add(modules) {
 		dependencies: [
 			'Doodad.Tools.Locale',
 		],
-			
+
 		create: function create(root, /*optional*/_options, _shared) {
 			//===================================
 			// Get namespaces
 			//===================================
-					
+
 			const doodad = root.Doodad,
 				types = doodad.Types,
 				tools = doodad.Tools,
 				locale = tools.Locale,
 				unicode = tools.Unicode;
-					
+
 			//===================================
 			// Natives
 			//===================================
-				
+
 			tools.complete(_shared.Natives, {
 				windowRegExp: global.RegExp,
 			});
-				
+
 			//===================================
 			// Internal
 			//===================================
-					
+
 			//const __Internal__ = {
 			//};
-				
-				
+
+
 			unicode.ADD('isClass', function isClass(className, chr, /*optional*/localeData) {
 				if (!localeData) {
 					localeData = locale.getCurrent();
@@ -85,51 +85,51 @@ exports.add = function add(modules) {
 			unicode.ADD('isLower', function isLower(chr, /*optional*/localeData) {
 				return unicode.isClass('lower', chr, localeData);
 			});
-				
+
 			unicode.ADD('isUpper', function isUpper(chr, /*optional*/localeData) {
 				return unicode.isClass('upper', chr, localeData);
 			});
-				
+
 			unicode.ADD('isAlpha', function isAlpha(chr, /*optional*/localeData) {
 				return unicode.isClass('alpha', chr, localeData);
 			});
-				
+
 			unicode.ADD('isDigit', function isDigit(chr, /*optional*/localeData) {
 				return unicode.isClass('digit', chr, localeData);
 			});
-				
+
 			unicode.ADD('isAlnum', function isAlnum(chr, /*optional*/localeData) {
 				return unicode.isClass('alnum', chr, localeData);
 			});
-				
+
 			unicode.ADD('isHexDigit', function isHexDigit(chr, /*optional*/localeData) {
 				return unicode.isClass('xdigit', chr, localeData);
 			});
-				
+
 			unicode.ADD('isPunct', function isPunct(chr, /*optional*/localeData) {
 				return unicode.isClass('punct', chr, localeData);
 			});
-				
+
 			unicode.ADD('isSpace', function isSpace(chr, /*optional*/localeData) {
 				return unicode.isClass('space', chr, localeData);
 			});
-				
+
 			unicode.ADD('isBlank', function isBlank(chr, /*optional*/localeData) {
 				return unicode.isClass('blank', chr, localeData);
 			});
-				
+
 			unicode.ADD('isGraph', function isGraph(chr, /*optional*/localeData) {
 				return unicode.isClass('graph', chr, localeData);
 			});
-				
+
 			unicode.ADD('isPrint', function isPrint(chr, /*optional*/localeData) {
 				return unicode.isClass('print', chr, localeData);
 			});
-				
+
 			unicode.ADD('isCntrl', function isCntrl(chr, /*optional*/localeData) {
 				return unicode.isClass('cntrl', chr, localeData);
 			});
-				
+
 
 			//===================================
 			// Init
