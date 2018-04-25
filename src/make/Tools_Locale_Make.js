@@ -27,11 +27,11 @@
 /* eslint no-console: "off" */  // CLI !
 
 //! IF_SET("mjs")
-	//! INJECT("import {default as nodeFs} from 'fs';")
+//! INJECT("import {default as nodeFs} from 'fs';")
 //! ELSE()
-	"use strict";
+"use strict";
 
-	const nodeFs = require('fs');
+const nodeFs = require('fs');
 //! END_IF()
 
 const nodeFsWriteFile = nodeFs.writeFile;
@@ -314,20 +314,20 @@ exports.add = function add(modules) {
 											} else if ((variableName === 'map') || types.has(section.maps, variableName)) {
 												// NOT NEEDED FOR THE MOMEMT
 												// if (word) {
-													// if (words) {
-														// words.push(word);
-													// } else {
-														// words = [word];
-													// };
+												// if (words) {
+												// words.push(word);
+												// } else {
+												// words = [word];
+												// };
 												// };
 												// if (variableName === 'map') {
-													// variableName = words.shift();
+												// variableName = words.shift();
 												// };
 												// section.maps[variableName] = words.map(function(value) {
-													// const parts = tools.split(value.slice(1, -1), ',', 2);
-													// const result = {};
-													// result[__Internal__.parseLocaleFileString(parts[0])] = __Internal__.parseLocaleFileString(parts[1]);
-													// return result;
+												// const parts = tools.split(value.slice(1, -1), ',', 2);
+												// const result = {};
+												// result[__Internal__.parseLocaleFileString(parts[0])] = __Internal__.parseLocaleFileString(parts[1]);
+												// return result;
 												// });
 											};
 										} else if (variableName && word) {
@@ -394,9 +394,9 @@ exports.add = function add(modules) {
 			__Internal__.parseMomentLocaleFile = function parseMomentLocaleFiles(loc, name) {
 				const Promise = types.getPromise();
 				return Promise.try(function() {
-						const path = require.resolve('moment/locale/' + locale.doodadToMomentName(name));
-						return files.readFile(path, {async: true, encoding: 'utf-8'});
-					})
+					const path = require.resolve('moment/locale/' + locale.doodadToMomentName(name));
+					return files.readFile(path, {async: true, encoding: 'utf-8'});
+				})
 					.then(function(code) {
 						const minifier = new minifiers.Javascript({encoding: 'utf-8'});
 						loc.LC_MOMENT = '';
@@ -439,56 +439,56 @@ exports.add = function add(modules) {
 
 
 			localeMake.REGISTER(make.Operation.$extend(
-			{
-				$TYPE_NAME: 'Database',
+				{
+					$TYPE_NAME: 'Database',
 
-				execute: doodad.OVERRIDE(function execute(command, item, /*optional*/options) {
-					const Promise = types.getPromise();
-					let source = item.source;
-					if (types.isString(source)) {
-						source = this.taskData.parseVariables(source, { isPath: true });
-					};
-					let dest = item.destination;
-					if (types.isString(dest)) {
-						dest = this.taskData.parseVariables(dest, { isPath: true });
-					};
-					tools.log(tools.LogLevels.Info, "Compiling locales database (this may take a while)...");
-					function proceedItems(items, index) {
-						if (index < items.length) {
-							const name = items[index];
-							tools.log(tools.LogLevels.Debug, "    ~0~ (~1~ of ~2~)", [name, index + 1, items.length]);
-							return __Internal__.loadLocale(source, name)
-								.then(function(loc) {
-									return __Internal__.parseMomentLocaleFile(loc, name);
-								})
-								.then(function(loc) {
-									return Promise.create(function nodeFsWriteFilePromise(resolve, reject) {
-										nodeFsWriteFile(dest.combine(name + '.json').toString(), JSON.stringify(loc), {encoding: 'utf-8'}, function(err) {
-											if (err) {
-												reject(err);
-											} else {
-												resolve();
-											};
-										});
-									});
-								})
-								.then(function() {
-									return proceedItems(items, index + 1);
-								});
-						} else {
-							// Done
-							return Promise.resolve();
+					execute: doodad.OVERRIDE(function execute(command, item, /*optional*/options) {
+						const Promise = types.getPromise();
+						let source = item.source;
+						if (types.isString(source)) {
+							source = this.taskData.parseVariables(source, { isPath: true });
 						};
-					};
-					return files.readFile(source.combine('list.txt'), {async: true, encoding: 'utf-8'})
-						.then(function(list) {
-							const items = list.replace(/(\r\n)|(\n\r)|\n|\r/g, '\n').split('\n').filter(function(name) {
-								return !!name;
+						let dest = item.destination;
+						if (types.isString(dest)) {
+							dest = this.taskData.parseVariables(dest, { isPath: true });
+						};
+						tools.log(tools.LogLevels.Info, "Compiling locales database (this may take a while)...");
+						function proceedItems(items, index) {
+							if (index < items.length) {
+								const name = items[index];
+								tools.log(tools.LogLevels.Debug, "    ~0~ (~1~ of ~2~)", [name, index + 1, items.length]);
+								return __Internal__.loadLocale(source, name)
+									.then(function(loc) {
+										return __Internal__.parseMomentLocaleFile(loc, name);
+									})
+									.then(function(loc) {
+										return Promise.create(function nodeFsWriteFilePromise(resolve, reject) {
+											nodeFsWriteFile(dest.combine(name + '.json').toString(), JSON.stringify(loc), {encoding: 'utf-8'}, function(err) {
+												if (err) {
+													reject(err);
+												} else {
+													resolve();
+												};
+											});
+										});
+									})
+									.then(function() {
+										return proceedItems(items, index + 1);
+									});
+							} else {
+							// Done
+								return Promise.resolve();
+							};
+						};
+						return files.readFile(source.combine('list.txt'), {async: true, encoding: 'utf-8'})
+							.then(function(list) {
+								const items = list.replace(/(\r\n)|(\n\r)|\n|\r/g, '\n').split('\n').filter(function(name) {
+									return !!name;
+								});
+								return proceedItems(items, 0);
 							});
-							return proceedItems(items, 0);
-						});
-				}),
-			}));
+					}),
+				}));
 
 
 			//===================================

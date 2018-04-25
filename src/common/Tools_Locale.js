@@ -26,7 +26,7 @@
 
 //! IF_SET("mjs")
 //! ELSE()
-	"use strict";
+"use strict";
 //! END_IF()
 
 exports.add = function add(modules) {
@@ -47,8 +47,8 @@ exports.add = function add(modules) {
 				//namespaces = doodad.Namespaces,
 				//files = tools.Files,
 				//unicode = tools.Unicode,
-                locale = tools.Locale,
-                localeResources = locale.Resources;
+				locale = tools.Locale,
+				localeResources = locale.Resources;
 
 			const __Internal__ = {
 				current: null,
