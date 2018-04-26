@@ -336,7 +336,8 @@ exports.add = function add(modules) {
 												if (types.has(section, variableName)) {
 													let val = section[variableName];
 													if (!types.isArray(val)) {
-														section[variableName] = val = [val];
+														val = [val];
+														section[variableName] = val;
 													};
 													tools.append(val, words);
 												} else {
