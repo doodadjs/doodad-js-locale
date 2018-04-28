@@ -477,7 +477,7 @@ exports.add = function add(modules) {
 										return proceedItems(items, index + 1);
 									});
 							} else {
-							// Done
+								// Done
 								return Promise.resolve();
 							};
 						};
