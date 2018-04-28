@@ -62,7 +62,7 @@
 	"resources": [
 		{
 			"name": "Doodad.Tools.Locale/Resources",
-			"namespace": "Doodad.Tools.Locale",
+			"namespace": "Doodad.Tools.Locale.Resources",
 			"sourceBase": "%PACKAGEDIR%/",
 			"source": "./locales",
 			"client": true,
