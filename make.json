@@ -48,12 +48,6 @@
 			browserify: true
 		},
 		{
-			src: "common/Tools_Locale_Resources.js",
-			client: true,
-			server: true,
-			browserify: true
-		},
-		{
 			src: "common/Tools_Locale_Unicode.js",
 			client: true,
 			server: true,
@@ -62,14 +56,11 @@
 	],
 	resources: [
 		{
-			name: "Doodad.Tools.Locale/Resources",
-			namespace: "Doodad.Tools.Locale.Resources",
 			sourceBase: "%PACKAGEDIR%/",
 			source: "./locales",
 			client: true,
 			server: true,
 			browserify: true,
-			filter: "^(en_.*[.]json|fr_.*[.]json)$"
 		}
 	],
 	tasks: {

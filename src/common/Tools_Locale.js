@@ -33,13 +33,8 @@ exports.add = function add(modules) {
 	modules = (modules || {});
 	modules['Doodad.Tools.Locale'] = {
 		version: /*! REPLACE_BY(TO_SOURCE(VERSION(MANIFEST("name")))) */ null /*! END_REPLACE()*/,
-		dependencies: [
-			'Doodad.Tools.Locale.Resources',
-			{
-				name: 'Doodad.Tools.Locale.Resources/Locales',
-				optional: true,
-			},
-		],
+		//dependencies: [
+		//],
 		create: function create(root, /*optional*/_options, _shared) {
 			const doodad = root.Doodad,
 				types = doodad.Types,
@@ -48,7 +43,7 @@ exports.add = function add(modules) {
 				//files = tools.Files,
 				//unicode = tools.Unicode,
 				locale = tools.Locale,
-				localeResources = locale.Resources;
+				resources = doodad.Resources;
 
 			const __Internal__ = {
 				current: null,
@@ -89,8 +84,12 @@ exports.add = function add(modules) {
 					if (locale.has(name)) {
 						return locale.get(name);
 					} else {
-						const loader = localeResources.getResourcesLoader();
-						return loader.load('./locales/' + name + '.json')
+						//! IF_SET('serverSide')
+							const path = '../locales/';
+						//! ELSE()
+							//! INJECT("const path = './locales/';")
+						//! END_IF()
+						return resources.load(path + name + '.json', {module: '@doodad-js/locale'})
 							.then(function(loc) {
 								loc.NAME = name;
 								__Internal__.cache[name] = loc;
