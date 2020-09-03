@@ -26,7 +26,7 @@
     "email": "doodadjs@gmail.com"
   },
   "devDependencies": {
-    "moment": "^2.22.1"
+    "moment": "^2.27.0"
   },
   "tonicExampleFilename": "tonic.js"
 }
